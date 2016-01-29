@@ -1,0 +1,23 @@
+ <ul id="news-box"> 
+     {% for tender in tenders %}
+          <li class="well">
+            <h4>
+                 <a href="{{ path('tender_detail',{'id': tender.getId}) }}"><i class="icon-bookmark"></i> {{ tender.getTenderTitle }} </a>
+             </h4>
+           <h6>
+                 <i class="icon-briefcase"></i> 
+                 {{ tender.getProcuringEntity }}
+                 <strong class="bottom-date">
+                 <i class="icon-calendar icon-large"></i> DEADLINE |
+                 {{ tender.getClosingDate|date("Y-m-d H:i:s") }}
+                 </strong>
+             </h6>
+             <p>
+                  ...                                
+             </p> 
+           </li>   
+      {% endfor %}
+          <li class="last">
+             <a href="">View All</a>
+          </li>
+    </ul>

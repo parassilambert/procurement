@@ -1,0 +1,37 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3 class="page-header">My Profile</h3>
+        </div>
+    </div>
+    <nav>
+        <ul class="nav nav-tabs">
+            <li role="presentation"><a href="{{ path('user_profile_view') }}">Contact Person</a></li> 
+            <li role="presentation"><a href="{{ path('user_company_profile_edit') }}">Company Details</a></li> 
+            <li role="presentation"><a href="{{ path('user_profile_attachment_view') }}">Attachments</a></li>
+            <li role="presentation" class="active"><a href="#">Account</a></li> 
+        </ul>
+    </nav>
+    <div class="panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <img style="width:150px;" alt="" src="{{ asset('uploads/logos/' ~ user.logoPath) }}" class="media-object thumbnail">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <p>
+                       <a href="{{ path('user_profile_logo_edit') }}" class="btn btn-default">Modify</a>
+                    <p> 
+                </div>
+            </div>
+        </div>
+   </div>
+    <div class="pull-right">
+         <p>
+          <a href="{{ path('user_profile_password_edit') }}" class="btn btn-default">Change Password</a>
+         <p> 
+    </div>
+{% endblock %}    

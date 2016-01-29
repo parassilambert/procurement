@@ -1,0 +1,65 @@
+{% extends '::base.html.twig' %}
+{% block title %}E-Procurement{% endblock %}
+{% block content %}
+    <table class="table view table-striped table-bordered">
+        {% for tender in tenders %}
+        <tr>
+            <td colspan="2" >
+                <h3> 
+                  {{ tender.getTenderTitle }}
+                </h3>
+            </td></tr>
+        <tr>
+            <td colspan="2" >
+                <h4>
+                  {{ tender.getProcuringEntity}}
+                </h4>
+            </td>
+        </tr>
+        <tr><th>Tender Ref No</th>
+            <td>
+                {{ tender.getTenderRefNumber }}
+            </td></tr>
+        <tr><th>Publication Date</th>
+            <td>
+               {{ tender.getPublicationDate|date("M d, Y")}}
+            </td></tr>
+        <tr><th>Closing Date</th>
+            <td>
+                {{ tender.getClosingDate|date("M d, Y")}}
+            </td></tr>
+                
+        <tr><th>Opening Date</th>
+            <td>
+                {{ tender.getOpeningDate|date("M d, Y")}}
+            </td></tr>
+                
+        <tr><th>Primary Category</th>
+            <td>
+                {{ tender.getPrimaryCategory }}
+            </td></tr>
+     
+        <tr><th>Tender Type</th>
+            <td>
+                {{ tender.getTenderType }}
+            </td></tr>
+       
+        <tr><th>Application Fee</th>
+            <td>
+                 {{ tender.getApplicationFee }}
+            </td></tr>
+        
+        <tr><th>Tender Documents</th>
+            <td>
+               <a href="">Download Document</a>
+            </td></tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+{% block js %}
+{% javascripts '@ProcurementBundle/Resources/public/js/*'
+               '@ProcurementBundle/Resources/public/js/bootstrap.js'
+               '@ProcurementBundle/Resources/public/js/jquery-1.7.2.min.js' %}
+     <script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock %}

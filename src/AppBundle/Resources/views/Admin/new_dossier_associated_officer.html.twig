@@ -1,0 +1,15 @@
+{% extends 'AppBundle::admin.html.twig' %}
+
+ {% block body %}
+<h4>Select an Officer to Associate with the dossier</h4>     
+{{ form_start(form) }}
+   <div class="row">
+       <div class="col-md-3">
+         {% for associate in form.adminUser %}
+              {{ form_row(associate) }}
+              {{ form_errors(associate) }}    
+         {% endfor %}
+       </div>
+   </div>
+{{ form_end(form) }}  
+{% endblock %}

@@ -1,0 +1,15 @@
+#src/AppBundle/Resources/config/routing.yml
+app_default:
+    resource: "@AppBundle/Controller/DefaultController.php"
+    type:     annotation
+    prefix:   /
+        
+app_user:
+    resource: "@AppBundle/Controller/UserController.php"
+    type:     annotation
+    prefix:   /user
+    
+app_admin:
+    resource: "@AppBundle/Controller/AdminController.php"
+    type:     annotation
+    prefix:   /admin

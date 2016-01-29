@@ -1,0 +1,95 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block body %}
+    <div class="row">
+      <div class="col-md-12 text-center">
+          <h5 class="page-header">My Tender</h5>
+        </div>
+      </div>
+<p>
+  This section below covers the submission of your tender documents.
+</p>
+<nav>
+<ul class="nav nav-tabs">
+  <li role="presentation" ><a href="{{ path('user_view_associated_dossier_details',{'id':bid.contract.id}) }}">Details</a></li> 
+  <li role="presentation" ><a href="{{ path('user_view_dossier_downloads',{'id':bid.contract.id}) }}">Downloads</a></li> 
+  <li role="presentation" class="active"><a href="#">Tenders</a></li> 
+</ul>
+</nav>
+<div class="row">
+   <div class="col-md-12 text-center">
+       <table id="my-tender" class="table table-striped table-bordered" cellspacing="0" width="100%">
+               <thead>
+                   <tr>
+                       <th>Title of document</th>
+                       <th>File Name</th>
+                       <th>Signature Date</th>
+                       <th>Upload Date</th>
+                       <th>Status</th>
+                       <th>Last Updated</th>
+                       <th>Action</th>
+                   </tr>
+               </thead>
+               <tfoot>
+                   <tr>
+                       <th>Title of document</th>
+                       <th>File Name</th>
+                       <th>Signature Date</th>
+                       <th>Upload Date</th>
+                       <th>Status</th>
+                       <th>Last Updated</th>
+                       <th>Action</th>
+                   </tr>
+               </tfoot>
+           </table>
+        </div>
+   </div>
+
+   <div class="pull-right">
+         <p>
+          <a href="{{ path('user_tender_new',{'id':bid.id}) }}" class="btn btn-info btn-large">Add</a>
+         <p> 
+   </div>
+          
+    <script type="text/javascript">
+      $(document).ready(function() {
+      $('#my-tender').DataTable( {
+        "ajax": "{{ path('user_tender_loader',{'id':bid.id}) }}",
+        "columns": [
+            { "data": "title" },
+            { "data": null,mRender: function (data, type, full, meta) {
+               var filepath=data.filePath;     
+               var pld = "{{ asset('uploads/tenders/' ~ "PLACEHODER") }}";
+               var path=pld.replace("PLACEHODER", filepath);
+             return '<a href="'+path+'">'+data.fileName+'</a>';
+            }},
+            { "data": "signatureDate.timestamp",mRender: function ( data, type, full, meta ) {
+               var theDate = new Date((data*1000));
+               return dateString = theDate;
+              }},
+             { "data": "uploadedAt.timestamp",mRender: function ( data, type, full, meta ) {
+               var theDate = new Date((data*1000));
+               return dateString = theDate;
+              }},
+            { "data": "status" },
+            { "data": "updatedAt.timestamp",mRender: function ( data, type, full, meta ) {
+               var theDate = new Date((data*1000));
+               return dateString = theDate;
+              }},
+            { "data": null,mRender: function ( data, type, full, meta ) {
+               var id=data.id;
+               var modifypld = "{{ path('user_edit_tender',{'id': "PLACEHODER"}) }}";
+               var modifypath=modifypld.replace("PLACEHODER", id);
+               var removepld = "{{ path('user_remove_tender',{'id': "PLACEHODER"}) }}";
+               var removepath=removepld.replace("PLACEHODER", id);
+              return '<a href="'+modifypath+'">'+"Modify"+'</a>' + " " + '<a href="'+ removepath +'">'+"Remove"+'</a>';
+              }
+            }
+           ]
+        });
+       });
+  </script>        
+
+{% endblock %}
+
+

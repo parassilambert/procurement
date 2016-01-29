@@ -1,0 +1,12 @@
+services:
+    session.handler.pdo:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        public: false
+        arguments:
+            - "mysql:dbname=procurement"
+            - { db_table: sessions, db_username: root, db_password: password }
+    security.access.tender_voter:
+        class: AppBundle\Security\Authorization\Voter\TenderVoter
+        public: false
+        tags:
+            - { name: security.voter }

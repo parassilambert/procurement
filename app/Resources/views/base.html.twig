@@ -1,0 +1,65 @@
+{# app/Resources/views/base.html.twig #}
+<!DOCTYPE html>
+    <head>
+     <meta charset="utf-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>e-Tendering</title>
+      <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/login.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/dataTables.bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap-table.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/select.bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery-ui.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery-ui.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery-ui.theme.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery-ui.theme.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery-ui.structure.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery-ui.structure.css') }}" rel="stylesheet" media="screen">
+      <script src="{{ asset('js/jquery.min.js') }}"></script>
+      <script src="{{ asset('js/jquery-ui.js') }}"></script>
+      <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+      <script src="{{ asset('js/bootstrap.js') }}"></script> 
+      <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+      <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+      <script src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
+      <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+      <script src="{{ asset('js/moment.js') }}"></script>
+      <script src="{{ asset('js/bootstrap-modal.js') }}"></script>
+      
+      <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+      
+    </head>
+   <body>
+     <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container-fluid">
+         <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+         </button>
+          <a class="navbar-brand" href="#">e-Tendering</a>
+       </div>
+            </div><!-- /.container-fluid -->
+      </nav>
+    <div class="container-fluid">
+      <div class="row">
+               <div class="col-sm-4 col-md-3 sidebar">
+                   {% block sidebar %}{% endblock %}
+               </div>
+               <div class="col-sm-10 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+                   {% block body %}{% endblock %}
+              </div> 
+        </div>
+      </div>
+    </body>
+

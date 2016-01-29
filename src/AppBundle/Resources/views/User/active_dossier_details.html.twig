@@ -1,0 +1,84 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block body %}
+    <div class="row">
+      <div class="col-md-12 text-center">
+       <h3 class="page-header">Details</h3>
+       </div>
+    </div>
+  <p>
+      Details of the selected notice are shown below with the action you may perform on the dossier Please click on the button below, if you wish to express your interest in the notice and participate.
+  </p>
+<nav>
+  <ul class="nav nav-tabs">
+     <li role="presentation" class="iactive"><a href="">Details</a></li> 
+   </ul>
+   </nav>
+  <div>
+   <div style="margin-top:45px"></div>  
+     <p>
+         Current time: {{ "now"|date("d/m/Y h:i:s") }}
+     </p>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">Details</h3>
+  </div>
+  <div class="panel-body">
+      <div class="pull-right">
+                 <img src="{{ asset('images/Logo.PNG') }}" width="150" height="120" alt="IFMIS Logo" title="IFMIS Logo" />
+
+              </div>
+          <div style="margin-top:150px"></div>
+    <div class="table-responsive">      
+    <table class="table table-striped table-bordered">
+        {% for dossier in dossier %}
+        <tr>
+            <td colspan="2" >
+                <h3> 
+                  {{ dossier.title }}
+                </h3>
+            </td>
+        </tr>
+       
+        <tr><th>Tender Ref No</th>
+            <td>
+                {{ dossier.referenceNumber }}
+            </td></tr>
+       
+        <tr><th>Type</th>
+            <td>
+                {{ dossier.procedureType}}
+            </td></tr>
+                
+        <tr><th>Status</th>
+            <td>
+                {{ dossier.status}}
+            </td></tr>
+         <tr><th>Tender deadline</th>
+         <td>
+                {{ dossier.closingDate|date("d/m/Y h:m:s")}}
+                
+         </td></tr>
+                        
+        <tr><th>Description</th>
+            <td>
+                {{ dossier.description }}
+            </td></tr>
+        <tr><th>Application Fee</th>
+            <td>
+               {{ dossier.paymentCurrency }} {{ dossier.price }}
+            </td></tr>
+        
+    {% endfor %}
+    </table>
+    </div>
+  </div>
+</div>
+    
+<div class="pull-right">
+      <p>
+        <a href="{{ path('user_new_bid',{'id':contract}) }}" class="btn btn-info btn-large">Participate</a>
+      <p> 
+       </div>
+ </div>
+{% endblock %}
+

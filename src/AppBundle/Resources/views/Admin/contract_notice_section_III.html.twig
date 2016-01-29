@@ -1,0 +1,310 @@
+{% extends 'AppBundle::admin.html.twig' %}
+{% block body %}
+{% form_theme form _self %}    
+{{ form_start(form, {'attr': {'class': 'my-form-class'} }) }}
+{{ form_errors(form) }} 
+   <div class="row">
+     <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"> CONTRACT NOTICE - {{ contract.referenceNumber }} : {{ contract.title }} </a>
+        </div>
+         <div id="navbar" class="navbar-collapse collapse">
+           <ul class="nav navbar-nav navbar-right">
+            <li>
+                {{ form_widget(form.save) }}
+            </li>
+           </ul>
+        </div>
+        </div>
+      </nav>        
+        <div class="col-md-3">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Completing the form...<span class="sr-only">(current)</span></a></li>
+            <li><a href="{{ path('contract_notice_step1_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Preliminary Questions </a></li>
+            <li><a href="{{ path('contract_notice_step2_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section I : Object of the contract </a></li>
+            <li><a href="{{ path('contract_notice_step3_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section II : Legal,economic,financial and technical information </a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section III : Procedure </a></li>
+            <li><a href="{{ path('contract_document_view',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section IV : Documents of the contract </a></li>
+            <li><a href="{{ path('contract_validation',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Validation </a></li>
+          </ul>
+         </div>
+        <div class="col-md-9">
+      <h4 class="sub-header">SECTION III: PROCEDURE</h4>
+          <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">III.1) AWARD CRITERIA</h6>
+                 <div class="panel panel-default">
+                   <div class="panel-body">
+                      <h6 class="sub-header">III.1.1) AWARD CRITERIA</h6>
+                      <div class="row">
+                             <div class="col-md-12">
+                           {% for creteria_type in form.awardCreteriaType %}
+                               {{ form_row(creteria_type) }}
+                               {{ form_errors(creteria_type) }}    
+                             {% endfor %}
+                                 </div>
+                              <div class="col-md-12">
+                                   <div class="row">
+                                   <div class="col-md-12">
+                                     <ul id="award-creteria-fields-list" data-prototype="{{ form_widget(form.contractEvaluation.vars.prototype)|e }}">
+                                    {% for award in form.contractEvaluation %}
+                                         <li>
+                                         {{ form_errors(award.creterion) }}    
+                                         {{ form_row(award.creterion) }}
+                                         </li>
+                                         <li>
+                                         {{ form_errors(award.weighting) }}    
+                                         {{ form_row(award.weighting) }}
+                                         </li>
+                                    {% endfor %}
+                                     </ul>
+                                   </div>   
+                                  </div>
+                           </div>
+                        </div>
+                   </div>
+                 </div>
+                 </div>
+             </div>
+           <div class="panel panel-default">
+                   <div class="panel-body">
+                      <h6 class="sub-header">III.2) ADMINISTRATIVE INFORMATION </h6>
+                      <div class="panel panel-default">
+                      <div class="panel-body">
+                       <h6 class="sub-header">III.2.1) CONDITIONS FOR OBTAINING SPECIFICATIONS AND ADDITIONAL DOCUMENTS OR DESCRIPTIVE DOCUMENTS </h6>
+                            <div class="form-group">
+                                <span class="label label-default">Payable documents</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"> 
+                                   {% for Ispayabledocument in form.isPayableDocument %}
+                                      {{ form_row(Ispayabledocument) }}
+                                      {{ form_errors(Ispayabledocument) }}    
+                                   {% endfor %}
+                                </div>      
+                            </div>
+                                <div class="form-group">
+                                  <span class="label label-default">If yes,</span>
+                                </div>
+                            <div class="row">
+                               <div class="col-md-4">
+                                 <div class="form-group">
+                                   <span class="label label-default">Price:</span>
+                                 </div>
+                               </div>
+                               <div class="col-md-6">
+                                      <div class="form-group">
+                                       {{ form_errors(form.price) }}       
+                                       {{ form_widget(form.price) }}
+                                      </div>
+                               </div>
+                             </div>
+                           <div class="row">
+                                <div class="col-md-4">
+                                   <div class="form-group">
+                                     <span class="label label-default">Currency:</span>
+                                   </div>
+                                </div>
+                               <div class="col-md-6">
+                                      <div class="form-group">
+                                       {{ form_errors(form.paymentCurrency) }}       
+                                       {{ form_widget(form.paymentCurrency) }}
+                                      </div>
+                                </div>
+                          </div>
+                               <div class="row">
+                               <div class="col-md-4">
+                                  <div class="form-group">
+                                     <span class="label label-default">Terms and method of payment:</span>
+                                  </div>
+                               </div>
+                               <div class="col-md-6">
+                                      <div class="form-group">
+                                       {{ form_errors(form.paymentTerms) }}       
+                                       {{ form_widget(form.paymentTerms) }}
+                                      </div>
+                               </div>
+                              </div>
+                         </div>
+                      </div>
+                       <div class="panel panel-default">
+                      <div class="panel-body">
+                       <h6 class="sub-header">III.2.2) TIME-LIMIT FOR REQUEST  OF TENDERS OR REQUESTS TO PARTICIPATE </h6>
+                             <div class="form-group">
+                               <span class="label label-default">Date:</span>
+                             </div>
+                               <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                          {{ form_errors(form.closingDate) }}       
+                                          {{ form_widget(form.closingDate) }}
+                                        </div>
+                                    </div>
+                               </div>
+                      </div>
+                      </div>
+                       <div class="panel panel-default">
+                      <div class="panel-body">
+                       <h6 class="sub-header">III.2.3) CONDITIONS FOR OPENING TENDERS </h6>
+                          <div class="form-group">
+                               <span class="label label-default">Date:</span>
+                             </div>
+                               <div class="row">
+                                   <div class="col-md-9">
+                                    <div class="form-group">
+                                       {{ form_errors(form.openingDate) }}       
+                                       {{ form_widget(form.openingDate) }}
+                                     </div>
+                                    </div>        
+                               </div>
+                           <div class="form-group">        
+                              <span class="label label-default">Place:</span>
+                           </div>
+                               <div class="row">
+                                   <div class="col-md-6">
+                                      <div class="form-group">
+                                       {{ form_errors(form.openingVenue) }}       
+                                       {{ form_widget(form.openingVenue) }}
+                                      </div>
+                                   </div>        
+                               </div>
+                           <div class="form-group">            
+                          <span class="label label-default">Persons authorised to be present at the opening of tenders</span>
+                           </div>
+                          <div class="row">
+                                 <div class="col-md-6">
+                                <div class="form-group">
+                                   {% for Isperson_authorised in form.isPersonAuthorised %}
+                                      {{ form_row(Isperson_authorised) }}
+                                      {{ form_errors(Isperson_authorised) }}    
+                                   {% endfor %}
+                                 </div>  
+                                  </div>    
+                            </div>
+                            <div class="row">
+                               <div class="col-md-2"> 
+                          <span class="label label-default">Attendees:</span>
+                               </div>
+                               <div class="col-md-6">
+                                    <div class="form-group">
+                                       {{ form_errors(form.authorisedPerson) }}       
+                                       {{ form_widget(form.authorisedPerson) }}
+                                    </div>
+                               </div>
+                              </div>
+                         </div>
+                      </div>
+                   </div>
+                 </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                   <div class="pull-left">
+                         {{ form_row(form.previousStep) }}
+                          </div>
+                         <div class="pull-right">
+                         {{ form_row(form.nextStep) }}
+                          </div>
+                      {{ form_end(form) }}
+            </div>
+            </div>
+        </div>
+   </div>
+   <script type="text/javascript">
+          var $collectionHolder;
+           // setup an "add a creteria" link
+          var $addCreteriaLink = $('<a href="#">Add an award creteria</a>');
+          var $newLinkLi = $('<li></li>').append($addCreteriaLink);
+          jQuery(document).ready(function() {
+           // Get the ul that holds the collection of tags
+          $collectionHolder = jQuery('#award-creteria-fields-list');
+           // add a delete link to all of the existing creteria form li elements
+          $collectionHolder.find('li').each(function() {
+              addCreteriaFormDeleteLink($(this));
+                });
+             });
+          jQuery(document).ready(function() {
+           // Get the ul that holds the collection of creteria
+          $collectionHolder = jQuery('#award-creteria-fields-list');
+          // add the "add a creteria" anchor and li to the creteria ul
+          $collectionHolder.append($newLinkLi);
+          // count the current form inputs we have (e.g. 2), use that as the new
+          // index when inserting a new item (e.g. 2)
+          $collectionHolder.data('index', $collectionHolder.find(':input').length);
+          $addCreteriaLink.on('click', function(e) {
+           // prevent the link from creating a "#" on the URL
+               e.preventDefault();
+           // add a new creteria form (see next code block)
+          addCreteriaForm($collectionHolder, $newLinkLi);
+               });
+             });
+          function addCreteriaForm($collectionHolder, $newLinkLi) {
+              // Get the data-prototype explained earlier
+           var prototype = $collectionHolder.data('prototype');
+           // get the new index
+           var index = $collectionHolder.data('index');
+           // Replace '__name__' in the prototype's HTML to
+           // instead be a number based on how many items we have
+           var newForm = prototype.replace(/__name__/g, index);
+            // increase the index with one for the next item
+           $collectionHolder.data('index', index + 1);
+            // Display the form in the page in an li, before the "Add a creteria" link li
+           var $newFormLi = $('<li></li>').append(newForm);
+           $newLinkLi.before($newFormLi);
+             // add a delete link to the new form
+            addCreteriaFormDeleteLink($newFormLi);
+           }
+         function addCreteriaFormDeleteLink($creteriaFormLi) {
+           var $removeFormA = $('<a href="#">Delete this award creteria</a>');
+           $creteriaFormLi.append($removeFormA);
+           $removeFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+           e.preventDefault();
+            // remove the li for the tag form
+            $creteriaFormLi.remove();
+         });
+        }
+</script>                
+<script type="text/javascript">
+var $Ispayabledocument_0 = $('#contract_entity_step4_isPayableDocument_0');
+$Ispayabledocument_0.change(function() {
+   if (this.checked) {
+       $("#contract_entity_step4_price" ).prop( "disabled", false );
+       $("#contract_entity_step4_paymentCurrency" ).prop( "disabled", false );
+       $("#contract_entity_step4_paymentTerms" ).prop( "disabled", false );
+  }
+});
+var $Ispayabledocument_1 = $('#contract_entity_step4_isPayableDocument_1');
+$Ispayabledocument_1.change(function() {
+   if (this.checked) {
+       $("#contract_entity_step4_price" ).prop( "disabled", true );
+       $("#contract_entity_step4_paymentCurrency" ).prop( "disabled", true );
+       $("#contract_entity_step4_paymentTerms" ).prop( "disabled", true );
+       $('#contract_entity_step4_price').val("");
+       $('#contract_entity_step4_paymentCurrency').val("");
+       $('#contract_entity_step4_paymentTerms').val("");
+  }
+});
+</script>
+<script type="text/javascript">
+ var $Isperson_authorised_0 = $('#contract_entity_step4_isPersonAuthorised_0');
+ $Isperson_authorised_0.change(function() {
+   if (this.checked) {
+       $("#contract_entity_step4_authorisedPerson" ).prop( "disabled", false );
+    }
+  });
+ var $Isperson_authorised_1 = $('#contract_entity_step4_isPersonAuthorised_1');
+   $Isperson_authorised_1.change(function() {
+    if (this.checked) {
+       $('#contract_entity_step4_authorisedPerson').val("");
+       $("#contract_entity_step4_authorisedPerson" ).prop( "disabled", true );
+  }
+});
+  </script>
+{% endblock %}

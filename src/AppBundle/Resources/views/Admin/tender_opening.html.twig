@@ -1,0 +1,44 @@
+{% extends 'AppBundle::admin.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3 class="page-header">Open Tenders</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <nav>
+                <ul class="nav nav-tabs">
+                    <li role="presentation" ><a href="{{ path('admin_view_dossier_details',{'id':contract}) }}">Details</a></li> 
+                    <li role="presentation" ><a href="#">Parameters</a></li> 
+                    <li role="presentation" ><a href="{{ path('admin_view_dossier_associated_officers',{'id':contract}) }}">Associated Officers</a></li> 
+                    <li role="presentation" class="active"><a href="#">Open Tenders</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div style="margin-top:45px"></div>  
+                <p>
+                    Current time: {{ "now"|date("m/d/Y h:i:s") }}
+                </p>   
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                Please confirm below the opening of the tenders for the selected dossier.This process might take some time until all the selected Opener officers of this dossier confirm the opening.Incase some openers do not confirm in time ,the opening process will need to be repeated.
+            </p> 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="pull-right">
+                <p>
+                    <a href="{{ path('admin_view_tenders',{'id':contract}) }}" class="btn btn-info btn-large">Open Tenders</a>
+                </p> 
+            </div>   
+        </div>
+    </div>
+{% endblock %}

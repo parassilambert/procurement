@@ -1,0 +1,57 @@
+{% extends 'ProcurementBundle::layout.html.twig' %}
+
+{% block title %}E-Procurement{% endblock %}
+{% block homepagetabs %}
+   <ul>
+	<li class="tenders"><a href="{{ path('all_tender') }}">All Tenders</a></li>
+	<li class="textiles"><a href="{{ path('tender_category',{'cat': 'Goods'}) }}">Goods</a></li>				
+	<li class="energy"><a href="{{ path('tender_category',{'cat': 'Services'}) }}">Services</a></li>
+	<li class="ict"><a href="{{ path('tender_category',{'cat': 'Consultancy'}) }}">Consultancy</a></li>
+        <li class="work"><a href="{{ path('tender_category',{'cat': 'Works'}) }}">Works</a></li>
+   </ul>
+{% endblock %}
+{% block content %}
+<div class="row">
+<div class="span6">
+   <h3>Latest tenders</h3>
+       {{ render(controller(
+        'ProcurementBundle:Tender:viewLatestTender'
+    )) }}
+   <h3>Closing tenders</h3>
+       {{ render(controller(
+        'ProcurementBundle:Tender:viewClosingTender'
+    )) }}
+    </div>
+<div class="span6">
+    <div>
+    <h3>Tender Notices</h3>
+    <div id="tender-notices">
+    <table border="1" class="tender_notices">
+         {% for tender in tenders %}
+            <tr class="firstwell entity">
+                 <td colspan="2">
+                     <a href="{{ path('tender_detail',{'id': tender.getId}) }}">
+                        <strong> {{ loop.index }}{{ "." }}  {{ tender.getTenderTitle }} </strong>
+                     </a>
+                 </td>
+             </tr>
+             <tr>
+                  <td> 
+                     {{ tender.getProcuringEntity }}
+                  </td>
+                  <td>DEADLINE |  {{ tender.getClosingDate|date("Y-m-d H:i:s") }}
+             </tr>
+          {% endfor %}   
+          <tr>
+             <td colspan="2">
+                  <strong>
+                     <a href="{{ path('all_tender') }}">View All Tenders</a>
+                  </strong>
+             </td>
+          </tr>
+    </table>
+    </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block body %}
+{{ form_start(form) }}
+{{ form_errors(form) }}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3 class="page-header">My Profile</h3>
+        </div>
+    </div>
+    <nav>
+        <ul class="nav nav-tabs">
+            <li role="presentation"><a href="{{ path('user_profile_view') }}">Contact Person</a></li> 
+            <li role="presentation" class="active"><a href="#">Company Details</a></li> 
+            <li role="presentation"><a href="{{ path('user_profile_attachment_view') }}">Attachments</a></li>
+            <li role="presentation"><a href="{{ path('user_profile_account_view')}}">Account</a></li> 
+        </ul>
+    </nav>
+    <div class="panel-default">
+        <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="label label-default">{{ form_label(form.companyName,'Company Name') }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div>
+                                {{ form_errors(form.companyName) }}       
+                                {{ form_row(form.companyName) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="label label-default">{{ form_label(form.taxCountry,'Tax Country') }}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div>
+                                {{ form_errors(form.taxCountry) }}       
+                                {{ form_widget(form.taxCountry) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="label label-default">{{ form_label(form.companyRegistrationNumber,'Company Registration Number') }}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div>
+                                {{ form_errors(form.companyRegistrationNumber) }}       
+                                {{ form_widget(form.companyRegistrationNumber) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="label label-default">{{ form_label(form.taxId,'Tax Id') }}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div>
+                                {{ form_errors(form.taxId) }}       
+                                {{ form_widget(form.taxId) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                            <input type="submit" value="Save" class="btn btn-default pull-right"/>
+                            </div>
+                        </div>
+                    </div>         
+                </div>
+            </div>
+{{ form_end(form) }}
+{% endblock %}    
+

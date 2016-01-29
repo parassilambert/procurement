@@ -1,0 +1,24 @@
+ 
+<table class="table table-striped table-bordered" id="active-dossiers">
+                  <tr>
+                      {# sorting of properties based on query components #}
+                  <th>{{ knp_pagination_sortable(pagination, 'Reference Number', 't.getTenderRefNumber') }}</th>
+                  <th{% if pagination.isSorted('t.getTenderTitle') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Subject', 't.getTenderTitle') }}</th>
+                  <th>{{ knp_pagination_sortable(pagination, 'Type','t.getTenderType') }}</th>
+                  </tr>
+
+                      {# table body #}
+                  {% for tender in pagination %}
+                  <tr {% if loop.index is odd %}class="color"{% endif %}>
+                  <td><a href="{{ path('tender_detail',{'id': tender.getId}) }}">{{ tender.getTenderRefNumber }}</a></td>
+                  <td>{{ tender.getTenderTitle }}</td>
+                  <td>{{ tender.getTenderType}}</td>
+                  </tr>
+                  {% endfor %}
+             </table>
+                 <p>
+                 Page {{ pagination.getCurrentPageNumber }} of {{ pagination.getPaginationData.pageCount }}, showing {{ pagination.getPaginationData.currentItemCount }} records out of {{ pagination.getTotalItemCount }} total, starting on record {{ pagination.getPaginationData.firstItemNumber }}, ending on {{ pagination.getPaginationData.lastItemNumber }}
+                 </p>
+                 <div class="navigation">
+                  {{ knp_pagination_render(pagination) }}
+              </div>           
