@@ -141,30 +141,7 @@ class Tender {
         return $this->fileName;
     }
 
-    /**
-     * Set signatureDate
-     *
-     * @param \datatime $signatureDate
-     *
-     * @return Tender
-     */
-    public function setSignatureDate(\datatime $signatureDate)
-    {
-        $this->signatureDate = $signatureDate;
-
-        return $this;
-    }
-
-    /**
-     * Get signatureDate
-     *
-     * @return \datatime
-     */
-    public function getSignatureDate()
-    {
-        return $this->signatureDate;
-    }
-
+    
     /**
      * Set uploadedAt
      *
@@ -411,5 +388,29 @@ class Tender {
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set signatureDate
+     *
+     * @param \DateTime $signatureDate
+     *
+     * @return Tender
+     */
+    public function setSignatureDate($signatureDate)
+    {
+        $this->signatureDate = $signatureDate;
+
+        return $this;
+    }
+
+    /**
+     * Get signatureDate
+     *
+     * @return \DateTime
+     */
+    public function getSignatureDate()
+    {
+        return $this->signatureDate;
     }
 }
