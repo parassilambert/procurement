@@ -254,30 +254,7 @@ class Payment {
         return $this->internalTransactionId;
     }
 
-    /**
-     * Set transactionTimestamp
-     *
-     * @param \timestamp $transactionTimestamp
-     *
-     * @return Payment
-     */
-    public function setTransactionTimestamp(\timestamp $transactionTimestamp)
-    {
-        $this->transactionTimestamp = $transactionTimestamp;
-
-        return $this;
-    }
-
-    /**
-     * Get transactionTimestamp
-     *
-     * @return \timestamp
-     */
-    public function getTransactionTimestamp()
-    {
-        return $this->transactionTimestamp;
-    }
-
+   
     /**
      * Set transactionType
      *
@@ -543,26 +520,26 @@ class Payment {
     }
 
     /**
-     * Set bid
+     * Set contract
      *
-     * @param \AppBundle\Entity\Bid $bid
+     * @param \AppBundle\Entity\Contract $contract
      *
      * @return Payment
      */
-    public function setBid(\AppBundle\Entity\Bid $bid = null)
+    public function setContract(\AppBundle\Entity\Contract $contract = null)
     {
-        $this->bid = $bid;
+        $this->contract = $contract;
 
         return $this;
     }
 
     /**
-     * Get bid
+     * Get contract
      *
-     * @return \AppBundle\Entity\Bid
+     * @return \AppBundle\Entity\Contract
      */
-    public function getBid()
+    public function getContract()
     {
-        return $this->bid;
+        return $this->contract;
     }
 }

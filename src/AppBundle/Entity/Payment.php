@@ -254,30 +254,7 @@ class Payment {
         return $this->internalTransactionId;
     }
 
-    /**
-     * Set transactionTimestamp
-     *
-     * @param \timestamp $transactionTimestamp
-     *
-     * @return Payment
-     */
-    public function setTransactionTimestamp(\timestamp $transactionTimestamp)
-    {
-        $this->transactionTimestamp = $transactionTimestamp;
-
-        return $this;
-    }
-
-    /**
-     * Get transactionTimestamp
-     *
-     * @return \timestamp
-     */
-    public function getTransactionTimestamp()
-    {
-        return $this->transactionTimestamp;
-    }
-
+   
     /**
      * Set transactionType
      *
@@ -564,5 +541,29 @@ class Payment {
     public function getContract()
     {
         return $this->contract;
+    }
+
+    /**
+     * Set transactionTimestamp
+     *
+     * @param string $transactionTimestamp
+     *
+     * @return Payment
+     */
+    public function setTransactionTimestamp($transactionTimestamp)
+    {
+        $this->transactionTimestamp = $transactionTimestamp;
+
+        return $this;
+    }
+
+    /**
+     * Get transactionTimestamp
+     *
+     * @return string
+     */
+    public function getTransactionTimestamp()
+    {
+        return $this->transactionTimestamp;
     }
 }
