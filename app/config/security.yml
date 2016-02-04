@@ -54,20 +54,20 @@ security:
         admin_register:
             path: /admin/register
             roles: IS_AUTHENTICATED_ANONYMOUSLY
-            requires_channel: https
+           
             
         admin_create:
             path: /admin/register/create
             roles: IS_AUTHENTICATED_ANONYMOUSLY    
-            requires_channel: https
+           
         admin_login:
             path: /admin/login
             roles: IS_AUTHENTICATED_ANONYMOUSLY
-            requires_channel: https
+           
         admin_area:
             path: /admin/.*
             roles: ROLE_ADMIN
-            requires_channel: https
+            
         economic_register:
             path: /user/register
             roles: IS_AUTHENTICATED_ANONYMOUSLY
@@ -75,14 +75,14 @@ security:
         economic_create:
             path: /user/register/create
             roles: IS_AUTHENTICATED_ANONYMOUSLY
-            requires_channel: https
+            
         economic_login:
             path: /user/login
             roles: IS_AUTHENTICATED_ANONYMOUSLY
-            requires_channel: https
+            
         ecomomic_area:
             path: /user/.*
             roles: ROLE_USER
-            requires_channel: https
+           
     access_decision_manager:
         strategy: unanimous
