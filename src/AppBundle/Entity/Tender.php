@@ -280,7 +280,7 @@ class Tender {
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return '/var/www/e_tendering'.'/web/'.$this->getUploadDir();
+      return __DIR__.'/../../../web/'.$this->getUploadDir();
     }
     
     protected function getUploadDir()

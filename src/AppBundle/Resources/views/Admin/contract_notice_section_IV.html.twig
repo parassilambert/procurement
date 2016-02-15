@@ -100,7 +100,7 @@
         "columns": [
             { "data": "title" },
             { "data": null,mRender: function (data, type, full, meta) {
-               var filePath=data;     
+               var filePath=data.filePath;     
                var pld = "{{ asset('uploads/contractdocuments/' ~ "PLACEHODER") }}";
                var path=pld.replace("PLACEHODER", filePath);
              return '<a href="'+path+'">'+data.fileName+'</a>';

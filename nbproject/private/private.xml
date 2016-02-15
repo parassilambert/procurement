@@ -8,9 +8,11 @@
             <file>file:/var/www/e_tendering/src/AppBundle/Entity/AdminUser.php</file>
             <file>file:/var/www/e_tendering/src/AppBundle/Resources/views/Admin/contract_notice_preliminary_question.html.twig</file>
             <file>file:/var/www/e_tendering/src/AppBundle/Form/Type/ContactPersonType.php</file>
+            <file>file:/var/www/e_tendering/web/app.php</file>
             <file>file:/var/www/e_tendering/src/AppBundle/Resources/views/admin.html.twig</file>
             <file>file:/var/www/e_tendering/src/AppBundle/Form/Type/AdminUserProfileType.php</file>
             <file>file:/var/www/e_tendering/src/AppBundle/Controller/UserController.php</file>
+            <file>file:/var/www/e_tendering/web/app_dev.php</file>
             <file>file:/var/www/e_tendering/src/AppBundle/Form/Type/AdminChangePasswordType.php</file>
             <file>file:/var/www/e_tendering/src/AppBundle/Resources/views/Admin/dossier_details.html.twig</file>
             <file>file:/var/www/e_tendering/src/AppBundle/Controller/AdminController.php</file>
