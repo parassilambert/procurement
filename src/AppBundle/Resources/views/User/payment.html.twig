@@ -118,21 +118,18 @@
                 });
             }
     function PayMpesa() {
-                serviceID = "1";
-                BillRef = document.getElementById('billRefNumber').value;
-                Amount = document.getElementById('amountExpected').value;
+               
+                Amount = 10;
                 urlOK = document.getElementById('callBackURLOnSuccess').value;
                 $("#MpesaStatus").html("<p class='alert alert-success m0'  style='padding:20px;  border-radius:5px;  border: 1px solid'><img src='images/loaders/loader6.gif'  alt='' />Confirming your Payment .....</p>");
                 gateway = "https://pesaflow.ecitizen.go.ke/PaymentAPI/Gateway.php";
-                mserviceID = "19";
-                invoiceNumber = "JVROWYS";
-                var payload = BillRef + "," + mserviceID + "," + invoiceNumber;
+    
+                var payload = '{{ BillRef }}';
                 var request = $.ajax({
                     url: gateway,
-                    // url: "https://127.0.0.1/iframe/Gateway.php",
+                    
                     type: "POST",
                     data: {
-                        'serviceID': serviceID,
                         'payload': payload
                     },
                     dataType: "text"

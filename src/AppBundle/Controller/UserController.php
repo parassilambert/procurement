@@ -12,9 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
-use AppBundle\Form\Type\EconomicUserRegistrationType;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\Type\TenderType;
 use AppBundle\Form\Type\ContactPersonType;
 use AppBundle\Form\Type\CompanyProfileType;
@@ -24,7 +24,7 @@ use AppBundle\Form\Type\ProfileLogoType;
 use AppBundle\Entity\Bid;
 use AppBundle\Entity\Tender;
 use AppBundle\Entity\Portfolio;
-use AppBundle\Entity\EconomicUser;
+use AppBundle\Entity\Payment;
 use AppBundle\Form\Model\EconomicUserRegistration;
 
 class UserController extends Controller
@@ -165,8 +165,61 @@ class UserController extends Controller
      * @Template()
      */
     public function paymentAction($id) {
-         $engine = $this->container->get('templating');
-         $content = $engine->render('@AppBundle/Resources/views/User/payment.html.twig');
+        // legacy application configures session
+        ini_set('session.save_handler', 'files');
+        ini_set('session.save_path', '/tmp');
+        session_start();
+
+        // Get Symfony to interface with this existing session
+        $session = new Session(new PhpBridgeSessionStorage());
+
+        // symfony will now interface with the existing PHP session
+        $session->start();
+        
+        // set session attributes
+        $session->set('BillRef', uniqid());
+          
+        $engine = $this->container->get('templating');
+        $content = $engine->render('@AppBundle/Resources/views/User/payment.html.twig',array('BillRef'=>$session->get('BillRef')));
+      return $response = new Response($content);
+    }
+    
+      /**
+     * @Route("/paymentgateway", name="payment_gateway")
+     * @Template()
+     */    
+ public function recievePaymentAction(Request $request){
+ 
+        $payment = new Payment();
+      
+        $payment->setBusinessNumber($request->request->get('business_number'));
+        $payment->setTransactionReference($request->request->get('transaction_reference'));
+        $payment->setInternalTransactionId($request->request->get('internal_transaction_id'));
+        $payment->setTransactionTimestamp($request->request->get('transaction_timestamp'));
+        $payment->setTransactionType($request->request->get('transaction_type'));
+        $payment->setAccountNumber($request->request->get('account_number'));
+        $payment->setSenderPhone($request->request->get('sender_phone'));
+        $payment->setFirstName($request->request->get('first_name'));
+        $payment->setMiddleName($request->request->get('middle_name'));
+        $payment->setLastName($request->request->get('last_name'));
+        $payment->setAmount($request->request->get('amount'));
+        $payment->setCurrency($request->request->get('currency'));
+        $payment->setSignature($request->request->get('signature'));
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($payment);
+        $em->flush();
+    }
+    
+    /**
+     * @Route("/dossier/{id}/confirmpayment", name="user_confirm_payment")
+     * @Template()
+     */
+    public function confirmPaymentAction($id,Request $request) {
+        $billRef = $request->request->get('payload');
+               
+        $engine = $this->container->get('templating');
+        $content = $engine->render('@AppBundle/Resources/views/User/payment.html.twig',array('BillRef'=>$session->get('BillRef')));
       return $response = new Response($content);
     }
     

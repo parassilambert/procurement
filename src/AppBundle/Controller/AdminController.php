@@ -12,11 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use AppBundle\Form\Type\AdminRegistrationType;
-use AppBundle\Form\Type\ContractStep1Type;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Core\Exception\AccessDeniedExceporm\Type\ContractStep1Type;
 use AppBundle\Form\Type\ContractStep2Type;
 use AppBundle\Form\Type\ContractStep3Type;
 use AppBundle\Form\Type\ContractStep4Type;
@@ -32,6 +30,7 @@ use AppBundle\Entity\ContractDocument;
 use AppBundle\Entity\ContractOfficer;
 use AppBundle\Entity\PreQualified;
 use AppBundle\Entity\BidEvaluation;
+use AppBundle\Entity\Audit;
 
 class AdminController extends Controller{
     
@@ -63,8 +62,7 @@ class AdminController extends Controller{
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function contractListAction(Request $request){
-        
-        $request->isXmlHttpRequest(); // is it an Ajax request?
+       
         $em = $this->getDoctrine()->getManager();
         $contracts = $em->getRepository('AppBundle:Contract')
                         ->findBy(array(), array('updatedAt' => 'DESC')); 
@@ -75,7 +73,18 @@ class AdminController extends Controller{
           });
         $serializer = new Serializer(array($normalizer), array($encoder));
         $jsonContent = $serializer->serialize(array('data'=>$contracts), 'json');
-        return  new Response($jsonContent);
+        
+        if ($contracts) {
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Load Dossier");
+          $em->persist($audit);
+          $em->flush(); 
+        }
+       return  new Response($jsonContent);
     }
     /**
      * @Route("/contract/view", name="contract_notice_list")
@@ -83,6 +92,8 @@ class AdminController extends Controller{
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function contractViewAction(){
+        
+        
        $engine = $this->container->get('templating');
        $content = $engine->render('@AppBundle/Resources/views/Admin/contract_notices.html.twig');
        return $response = new Response($content);
@@ -106,6 +117,18 @@ class AdminController extends Controller{
              $em = $this->getDoctrine()->getManager();
              $em->persist($data);
              $em->flush();
+             
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Create notice step 1");
+             $audit->setDossier($data);
+             $em->persist($audit);
+             $em->flush(); 
+       
              if($form->get('save')->isClicked())
              {
                 return $this->redirectToRoute('contract_notice_step1_edit',array('id'=>$contract->getId()),301);
@@ -137,6 +160,18 @@ class AdminController extends Controller{
              $data = $form->getData();
              $em->persist($data);
              $em->flush();
+             
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Edit notice step 1");
+             $audit->setDossier($data);
+             $em->persist($audit);
+             $em->flush(); 
+             
              if($form->get('save')->isClicked())
                {
                 return $this->redirectToRoute('contract_notice_step1_edit',array('id'=>$id),301);
@@ -170,6 +205,18 @@ class AdminController extends Controller{
             $data = $form->getData();
             $em->persist($data);
             $em->flush();
+            
+            //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Edit notice step 2");
+             $audit->setDossier($data);
+             $em->persist($audit);
+             $em->flush();
+             
            if($form->get('previousStep')->isClicked())
              {
                 return $this->redirectToRoute('contract_notice_step1_edit',array('id'=>$id),301);
@@ -204,6 +251,18 @@ class AdminController extends Controller{
              $data = $form->getData();
              $em->persist($data);
              $em->flush();
+             
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->getName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Edit notice step 3");
+             $audit->setDossier($data);
+             $em->persist($audit);
+             $em->flush();
+             
              if($form->get('previousStep')->isClicked())
              {
                 return $this->redirectToRoute('contract_notice_step2_edit',array('id'=>$id),301);
@@ -249,6 +308,18 @@ class AdminController extends Controller{
              $data = $form->getData();
              $em->persist($data);
              $em->flush();
+             
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Edit notice step 4");
+             $audit->setDossier($data);
+             $em->persist($audit);
+             $em->flush();
+             
              if($form->get('previousStep')->isClicked())
              {
                 return $this->redirectToRoute('contract_notice_step3_edit',array('id'=>$id),301);
@@ -297,6 +368,18 @@ class AdminController extends Controller{
             'No record found for contract with id'.$id
               );
             }
+            
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Load contract documents");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();   
+            
         $engine  = $this->container->get('templating');
         $content = $engine->render('@AppBundle/Resources/views/Admin/contract_notice_section_IV.html.twig',array('contract'=>$contract));
       return $response = new Response($content);
@@ -323,6 +406,18 @@ class AdminController extends Controller{
           $data = $form->getData();
           $em->persist($data);
           $em->flush();
+          
+          //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Create contract document");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush(); 
+       
          return $this->redirect($this->generateUrl('contract_document_view',array('id'=> $id)));
          }
          $engine = $this->container->get('templating');
@@ -350,6 +445,18 @@ class AdminController extends Controller{
           $data = $form->getData();
           $em->persist($data);
           $em->flush();
+          
+          //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Edit contract document");
+          $audit->setDossier($contractdocument->getContract());
+          $em->persist($audit);
+          $em->flush();
+          
          return $this->redirect($this->generateUrl('contract_document_view',array('id'=> $contractdocument->getContract()->getId())));
          }
          $engine = $this->container->get('templating');
@@ -374,6 +481,17 @@ class AdminController extends Controller{
          $em->remove($contractdocument);
          $em->flush();
         
+          //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Delete contract document");
+          $audit->setDossier($contractdocument->getContract());
+          $em->persist($audit);
+          $em->flush();
+          
         return $this->redirect($this->generateUrl('contract_document_view',array('id'=> $contractdocument->getContract()->getId())));
       }
       
@@ -390,7 +508,18 @@ class AdminController extends Controller{
             'No record found for contract with id'.$id
               );
             }
-          
+        
+          //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Validate notice");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush();    
+            
         $validator = $this->get('validator');
         $errors = $validator->validate($contract, null, array('validationStep1','validationStep2','validationStep3','validationStep4'));
         if (count($errors) > 0) {
@@ -417,9 +546,20 @@ class AdminController extends Controller{
                 'No record found for contract with id'.$id
               );
             }
-         $em->remove($contract);
-         $em->flush();
+          $em->remove($contract);
+          $em->flush();
          
+          //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Delete notice");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush();
+          
         return $this->redirect($this->generateUrl('contract_notice_list'));
       }
        /**
@@ -444,6 +584,18 @@ class AdminController extends Controller{
          $contractofficer->setPermission("Owner");
          $em->persist($contractofficer);
          $em->flush();
+         
+          //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Publish notice");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush();
+          
         return $this->redirect($this->generateUrl('contract_notice_list'));
       }
       
@@ -508,6 +660,23 @@ class AdminController extends Controller{
                 'No record found for dossier with id'." ".$id
               );
             }
+          $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
+          if (!$contract) {
+                 throw $this->createNotFoundException(
+                'No record found for contract with id'.$id
+              );
+            }  
+          //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("View active dossier details");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush(); 
+            
          $engine = $this->container->get('templating');
          $content = $engine->render('@AppBundle/Resources/views/Admin/active_dossier_details.html.twig',array('dossier' => $dossier,'contract' =>$id));
     
@@ -529,6 +698,25 @@ class AdminController extends Controller{
                 'No record found for dossier with id'." ".$id
               );
             }
+            
+           $contract = $em->getRepository('AppBundle:Contract')
+                         ->findOneBy( array('id' => $id));
+           if (!$contract) {
+                 throw $this->createNotFoundException(
+                'No record found for contract with id'.$id
+              );
+            } 
+          //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("View asscociated dossier details");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush();
+          
          $engine = $this->container->get('templating');
          $content = $engine->render('@AppBundle/Resources/views/Admin/dossier_details.html.twig',array('dossier' => $dossier,'contract' =>$id));
     
@@ -566,7 +754,22 @@ class AdminController extends Controller{
           });
          $serializer = new Serializer(array($normalizer), array($encoder));
          $jsonContent = $serializer->serialize(array('data'=>$associatedofficers), 'json');
-       return  new Response($jsonContent);
+           
+          //Audit
+          $contract = $em->getRepository('AppBundle:Contract')
+                         ->findOneBy( array('id' => $id));
+          if ($associatedofficers) {
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("View asscociated dossier officers");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush();
+          }
+         return  new Response($jsonContent);
     }
     
      /**
@@ -595,6 +798,25 @@ class AdminController extends Controller{
              $data = $form->getData();
              $em->persist($data);
              $em->flush();
+             
+          //Audit
+          $audit = new Audit();
+          $contract = $em->getRepository('AppBundle:Contract')
+                         ->findOneBy( array('id' => $id));
+          if (!$contract) {
+                 throw $this->createNotFoundException(
+                'No record found for contract with id'.$id
+              );
+           }
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Create asscociated dossier officer");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush();
+          
           return $this->redirectToRoute('admin_view_dossier_associated_officers',array('id'=> $id),301);
          } 
          $engine = $this->container->get('templating');
@@ -617,7 +839,17 @@ class AdminController extends Controller{
             }
           $em->remove($contractofficer);
           $em->flush();
-        return $this->redirect($this->generateUrl('admin_view_dossier_associated_officers',array('contract'=> $contractofficer->getContract()->getId())));
+            //Audit
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("Delete asscociated dossier officer");
+          $audit->setDossier($contractofficer->getContract());
+          $em->persist($audit);
+          $em->flush();
+        return $this->redirect($this->generateUrl('admin_view_dossier_associated_officers',array('id'=> $contractofficer->getContract()->getId())));
       }
       
     /**
@@ -654,15 +886,30 @@ class AdminController extends Controller{
          $query = $em->createQuery(
                                    'SELECT p,c FROM AppBundle:PreQualified p JOIN p.contract c WHERE p.contract=:id'
                                    )->setParameter('id',$id);
-         $prequalified = $query->getResult(); 
+         $prequalified = $query->getResult();
+         
          $encoder = new JsonEncoder();
          $normalizer = new GetSetMethodNormalizer();
          $normalizer->setCircularReferenceHandler(function ($object) {
                   return $object->getId();
           });
-         $serializer = new Serializer(array($normalizer), array($encoder));
-         $jsonContent = $serializer->serialize(array('data'=>$prequalified), 'json');
-        return  new Response($jsonContent);
+          $serializer = new Serializer(array($normalizer), array($encoder));
+          $jsonContent = $serializer->serialize(array('data'=>$prequalified), 'json');
+            //Audit
+          $contract = $em->getRepository('AppBundle:Contract')
+                         ->findOneBy( array('id' => $id));
+          if($prequalified){
+          $audit = new Audit();
+          $contracting = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($contracting->getUsername());
+          $audit->setName($contracting);
+          $audit->setFunctionType("Contracting");
+          $audit->setEventType("View pre-qualified suppliers");
+          $audit->setDossier($contract);
+          $em->persist($audit);
+          $em->flush();
+          }
+         return  new Response($jsonContent);
     }
     
     /**
@@ -691,6 +938,25 @@ class AdminController extends Controller{
              $recipient= $data->getCompanyName()->getEmail();
              $em->persist($data);
              $em->flush();
+             
+             //Audit
+             $contract = $em->getRepository('AppBundle:Contract')
+                         ->findOneBy( array('id' => $id));
+             if (!$contract) {
+                 throw $this->createNotFoundException(
+                'No record found for contract with id'.$id
+              );
+             }
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Create pre-qualified supplier");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
+             
             self::sendMailAction($recipient);
           return $this->redirectToRoute('admin_view_dossier_prequalified',array('id'=> $id),301);
          } 
@@ -728,8 +994,19 @@ class AdminController extends Controller{
                 'No record found for prequalifed company with id'.$id
               );
             }
-          $em->remove($prequalified);
-          $em->flush();
+            $em->remove($prequalified);
+            $em->flush();
+          
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Delete pre-qualified supplier");
+             $audit->setDossier($prequalified->getContract());
+             $em->persist($audit);
+             $em->flush();
         return $this->redirect($this->generateUrl('admin_view_dossier_prequalified',array('id'=> $prequalified->getContract()->getId())));
       }
       
@@ -753,7 +1030,23 @@ class AdminController extends Controller{
     public function tendersViewAction($id) {
         $em = $this->getDoctrine()->getManager();
         $bid = $em->getRepository('AppBundle:Bid')->findBy(array('contract' => $id));
-        
+             //Audit
+             $contract = $em->getRepository('AppBundle:Contract')
+                         ->findOneBy( array('id' => $id));
+             if (!$contract) {
+                 throw $this->createNotFoundException(
+                'No record found for contract with id'.$id
+              );
+             }
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Load tender");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
         $engine  = $this->container->get('templating');
         $content = $engine->render('@AppBundle/Resources/views/Admin/tenders.html.twig',array('bid'=>$bid,'contract'=>$id));
       return $response = new Response($content);
@@ -780,7 +1073,17 @@ class AdminController extends Controller{
             $data = $form->getData();
             $em->persist($data);
             $em->flush();
-            
+             //Audit
+             
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Evaluate tender");
+             $audit->setDossier($bid->getContract());
+             $em->persist($audit);
+             $em->flush();
         return $this->redirect($this->generateUrl('admin_view_tenders',array('id'=> $bid->getContract()->getId())));
         }    
          $engine  = $this->container->get('templating');
@@ -804,6 +1107,17 @@ class AdminController extends Controller{
             }
           $em->remove($bidevaluation);
           $em->flush();
+          
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Delete tender evaluation");
+             $audit->setDossier($bidevaluation->getBid()->getContract());
+             $em->persist($audit);
+             $em->flush();
         return $this->redirect($this->generateUrl('admin_view_tenders',array('id'=> $bidevaluation->getBid()->getContract()->getId())));
       }
     
@@ -822,6 +1136,15 @@ class AdminController extends Controller{
            $data = $form->getData();
            $em->persist($data);
            $em->flush();
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Edit Profile");
+             $em->persist($audit);
+             $em->flush();
          }
         return $this->render(
             'AppBundle:Admin:profile.html.twig',array('form' => $form->createView()));
@@ -835,6 +1158,16 @@ class AdminController extends Controller{
     public function profileAccountViewAction()
     {
         $adminuser = $this->get('security.token_storage')->getToken()->getUser();
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("View Profile");
+             $em = $this->getDoctrine()->getManager();
+             $em->persist($audit);
+             $em->flush();
         return $this->render(
             'AppBundle:Admin:profile_account.html.twig',array('user' => $adminuser));
      } 
@@ -855,6 +1188,15 @@ class AdminController extends Controller{
            $this->encodePassword($data);
            $em->persist($data);
            $em->flush();
+             //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Edit profile password");
+             $em->persist($audit);
+             $em->flush();
           return $this->redirect($this->generateUrl('admin_profile_account_view'));
          }
         return $this->render(
@@ -898,6 +1240,16 @@ class AdminController extends Controller{
         $em->persist($registration->getUser());
         $em->flush();
        
+         //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("SignUp");
+             $em->persist($audit);
+             $em->flush();
+        
         $this->authenticate($registration->getUser(),self::PROVIDER_KEY_ADMIN);
         
         return $this->redirectToRoute('admin_home');
@@ -954,6 +1306,16 @@ class AdminController extends Controller{
     {
         // this controller will not be executed,
         // as the route is handled by the Security system
+         //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $$audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Login");
+             $em = $this->getDoctrine()->getManager();
+             $em->persist($audit);
+             $em->flush();
     }
     
     /**
@@ -963,5 +1325,15 @@ class AdminController extends Controller{
     public function logoutAction()
     {
         // The security layer will intercept this request
+         //Audit
+             $audit = new Audit();
+             $contracting = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($contracting->getUsername());
+             $audit->setName($contracting);
+             $audit->setFunctionType("Contracting");
+             $audit->setEventType("Logout");
+             $em = $this->getDoctrine()->getManager();
+             $em->persist($audit);
+             $em->flush();
     }
 }

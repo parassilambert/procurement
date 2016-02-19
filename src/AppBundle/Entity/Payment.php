@@ -30,13 +30,7 @@ class Payment {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
-    /**
-     * @ORM\Column(name="bill_reference_number",type="string",length=60,unique=true)
-     * @Assert\NotBlank()
-     */
-    protected $billReferenceNumber;
-    
+         
     /**
      * @ORM\Column(name="business_number",type="integer")
      * @Assert\NotBlank()
@@ -156,30 +150,6 @@ class Payment {
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set billReferenceNumber
-     *
-     * @param string $billReferenceNumber
-     *
-     * @return Payment
-     */
-    public function setBillReferenceNumber($billReferenceNumber)
-    {
-        $this->billReferenceNumber = $billReferenceNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get billReferenceNumber
-     *
-     * @return string
-     */
-    public function getBillReferenceNumber()
-    {
-        return $this->billReferenceNumber;
     }
 
     /**

@@ -314,6 +314,11 @@ class Contract {
      */
     protected $payments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Audit",mappedBy="dossier")
+     */
+    protected $audits;
+    
     public function __construct() {
         $this->associatedOfficers = new ArrayCollection();
         $this->contractDocuments = new ArrayCollection();
@@ -321,6 +326,8 @@ class Contract {
         $this->preQualified = new ArrayCollection();
         $this->bids = new ArrayCollection();
         $this->payments = new ArrayCollection();
+        $this->audits = new ArrayCollection();
+
     }
 
     /**
@@ -1620,5 +1627,63 @@ class Contract {
     public function getPayments()
     {
         return $this->payments;
+    }
+
+    /**
+     * Add payment
+     *
+     * @param \AppBundle\Entity\Payment $payment
+     *
+     * @return Contract
+     */
+    public function addPayment(\AppBundle\Entity\Payment $payment)
+    {
+        $this->payments[] = $payment;
+
+        return $this;
+    }
+
+    /**
+     * Remove payment
+     *
+     * @param \AppBundle\Entity\Payment $payment
+     */
+    public function removePayment(\AppBundle\Entity\Payment $payment)
+    {
+        $this->payments->removeElement($payment);
+    }
+
+    /**
+     * Add audit
+     *
+     * @param \AppBundle\Entity\Audit $audit
+     *
+     * @return Contract
+     */
+    public function addAudit(\AppBundle\Entity\Audit $audit)
+    {
+        $this->audits[] = $audit;
+
+        return $this;
+    }
+
+    /**
+     * Remove audit
+     *
+     * @param \AppBundle\Entity\Audit $audit
+     */
+    public function removeAudit(\AppBundle\Entity\Audit $audit)
+    {
+        $this->audits->removeElement($audit);
+    }
+
+    /**
+     * Get audits
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAudits()
+    {
+        return $this->audits;
     }
 }
