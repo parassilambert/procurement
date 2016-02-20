@@ -134,7 +134,7 @@ class EconomicUser implements UserInterface,  \Serializable{
     }
 
     public function getRoles() {
-        return array('ROLE_USER');
+        return array('ROLE_ECONOMIC');
     }
 
     public function getSalt() {

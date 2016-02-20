@@ -1,0 +1,221 @@
+{% extends 'AppBundle::contracting.html.twig' %}
+
+{% block body %}
+{{ form_start(form, {'attr': {'class': 'my-form-class'} }) }}
+{{ form_errors(form) }} 
+<div class="row">
+     <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"> CONTRACT NOTICE - {{ contract.referenceNumber }} : {{ contract.title }} </a>
+        </div>
+         <div id="navbar" class="navbar-collapse collapse">
+           <ul class="nav navbar-nav navbar-right">
+            <li>
+               {{ form_row(form.save) }}
+            </li>
+           </ul>
+        </div>
+        </div>
+      </nav>        
+        <div class="col-md-3">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Completing the form...<span class="sr-only">(current)</span></a></li>
+            <li><a href="{{ path('contract_notice_step1_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Preliminary Questions </a></li>
+            <li><a href="{{ path('contract_notice_step2_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section I : Object of the contract </a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section II : Legal,economic,financial and technical information </a></li>
+            <li><a href="{{ path('contract_notice_step4_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Section III : Procedure </a></li>
+            <li><a href="{{ path('contract_document_view',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section IV : Documents of the contract </a></li>
+            <li><a href="{{ path('contract_validation',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Validation </a></li>
+          </ul>
+         </div>
+        <div class="col-md-9">
+      <h4 class="sub-header">SECTION II: LEGAL, ECONOMIC, FINANCIAL AND TECHNICAL INFORMATION</h4>
+      <div class="panel panel-default">
+  <div class="panel-body">
+      <h5 class="sub-header">II.1) CONDITIONS RELATING TO THE CONTRACT</h5>
+       <div class="panel panel-default">
+       <div class="panel-body">
+           <h6 class="sub-header">II.1.1) DEPOSITS AND GUARANTEES REQUIRED</h6>
+               <div class="row">
+                   <div class="col-md-3">
+                       <span class="label label-default">Description:</span>
+                   </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                           {{ form_errors(form.guaranteeCondition) }}       
+                           {{ form_widget(form.guaranteeCondition) }}
+                        </div>
+                    </div>
+               </div>
+      </div>
+  </div>
+             <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">II.1.2) MAIN FINANCING CONDITIONS AND PAYMENT ARRANGEMENTS AND / OR REFERENCE TO THE RELEVANT PROVISIONS REGULATING THEM</h6>
+               <div class="row">
+                  <div class="col-md-3">
+                       <span class="label label-default">Description:</span>
+                   </div>
+                    <div class="col-md-9">    
+                         <div class="form-group">
+                           {{ form_errors(form.financialCondition) }}       
+                           {{ form_widget(form.financialCondition) }}
+                         </div>
+                    </div>
+                 </div>
+                 </div>
+             </div>
+       <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">II.1.3) LEGAL FORM TO BE TAKEN BY TENDERERS TO WHOM THE CONTRACT IS TO BE AWARDED</h6>
+               <div class="row">
+                  <div class="col-md-3">
+                       <span class="label label-default">Description:</span>
+                   </div>
+                    <div class="col-md-9">    
+                         <div class="form-group">
+                           {{ form_errors(form.legalCondition) }}       
+                           {{ form_widget(form.legalCondition) }}
+                        </div>
+                    </div>
+                 </div>
+                </div>
+             </div>
+       <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">II.1.4) OTHER PARTICULAR CONDITIONS TO WHICH THE PERFORMANCE OF THE CONTRACT IS SUBJECT</h6>
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           {% for hasOtherCondition in form.hasOtherCondition %}
+                               {{ form_row(hasOtherCondition) }}
+                               {{ form_errors(hasOtherCondition) }}    
+                             {% endfor %}
+                        </div>
+                   </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <span class="label label-default">If yes,description of particular conditions</span>
+                        </div>
+                          <div class="form-group">
+                              {{ form_errors(form.otherCondition) }}       
+                              {{ form_widget(form.otherCondition) }}
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+             </div>
+          </div>
+          <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">II.2) CONDITION FOR PARTICIPATION</h6>
+                 <div class="panel panel-default">
+                   <div class="panel-body">
+                      <h6 class="sub-header">II.2.1) PERSONAL SITUATION OF TENDERERS INCLUDING REQUIREMENTS RELATING TO ENROLMENT ON PROFESSIONAL OR TRADE REGISTERS</h6>
+                         <div class="row">
+                            <div class="col-md-6">
+                                 <label for="personal-situation">Information and formalities necessary for evaluating if requirements are met:</label>
+                            </div>
+                           <div class="col-md-6">    
+                               <div class="form-group">
+                                  {{ form_errors(form.eligibility) }}       
+                                  {{ form_widget(form.eligibility) }}
+                               </div>
+                           </div>
+                        </div>
+                   </div>
+                 </div>
+                  <div class="panel panel-default">
+                   <div class="panel-body">
+                      <h6 class="sub-header">II.2.1) ECONOMIC AND FINANCIAL CAPACITY </h6>
+                         <div class="row">
+                            <div class="col-md-6">
+                                 <label for="economic-financial-capacity">Information and formalities necessary for evaluating if requirements are met:</label>
+                            </div>
+                           <div class="col-md-6">    
+                               <div class="form-group">
+                                  {{ form_errors(form.financialEvaluation) }}       
+                                  {{ form_widget(form.financialEvaluation) }}
+                               </div>
+                           </div>
+                        </div>
+                       <div class="row">
+                            <div class="col-md-6">
+                                 <label for="economic-financial-capacity-minimum-levels">Minimum level(s) of standards possibly required</label>
+                            </div>
+                           <div class="col-md-6">    
+                               <div class="form-group">
+                                  {{ form_errors(form.financialMinLevel) }}       
+                                  {{ form_widget(form.financialMinLevel) }}
+                               </div>
+                           </div>
+                        </div>
+                   </div>
+                 </div>
+                    <div class="panel panel-default">
+                   <div class="panel-body">
+                      <h6 class="sub-header">II.2.1) TECHNICAL CAPACITY </h6>
+                         <div class="row">
+                            <div class="col-md-6">
+                                 <label for="technical-capacity">Information and formalities necessary for evaluating if requirements are met:</label>
+                            </div>
+                           <div class="col-md-6">    
+                               <div class="form-group">
+                                  {{ form_errors(form.technicalEvaluation) }}       
+                                  {{ form_widget(form.technicalEvaluation) }}
+                               </div>
+                           </div>
+                        </div>
+                       <div class="row">
+                            <div class="col-md-6">
+                                 <label for="technical-capacity-minimum-levels">Minimum level(s) of standards possibly required</label>
+                            </div>
+                           <div class="col-md-6">    
+                               <div class="form-group">
+                                  {{ form_errors(form.technicalMinLevel) }}       
+                                  {{ form_widget(form.technicalMinLevel) }}
+                               </div>
+                           </div>
+                        </div>
+                   </div>
+                 </div>
+                 </div>
+             </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                   <div class="pull-left">
+                         {{ form_row(form.previousStep) }}
+                          </div>
+                         <div class="pull-right">
+                         {{ form_row(form.nextStep) }}
+                          </div>
+                      {{ form_end(form) }}
+               </div>
+            </div>
+        </div>
+</div>
+<script type="text/javascript">
+var $othercondition_0 = $('#contract_entity_step3_hasOtherCondition_0');
+$othercondition_0.change(function() {
+   if (this.checked) {
+          $("#contract_entity_step3_otherCondition" ).prop( "disabled", false );
+        }
+});
+
+var $othercondition_1 = $('#contract_entity_step3_hasOtherCondition_1');
+$othercondition_1.change(function() {
+   if (this.checked) {
+          $('#contract_entity_step3_otherCondition').val("");
+          $("#contract_entity_step3_otherCondition" ).prop( "disabled", true );
+     }
+});
+</script>
+{% endblock %}

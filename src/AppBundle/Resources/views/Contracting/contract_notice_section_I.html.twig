@@ -1,0 +1,384 @@
+{% extends 'AppBundle::contracting.html.twig' %}
+{% block body %}
+{{ form_start(form, {'attr': {'class': 'my-form-class'} }) }}
+{{ form_errors(form) }}  
+   <div class="row">
+     <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"  aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"> CONTRACT NOTICE - {{ contract.referenceNumber }} : {{ contract.title }} </a>
+        </div>
+         <div id="navbar" class="navbar-collapse collapse">
+           <ul class="nav navbar-nav navbar-right">
+            <li>
+              {{ form_row(form.save) }}
+            </li>
+           </ul>
+        </div>
+        </div>
+      </nav>        
+        <div class="col-md-3">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Completing the form...<span class="sr-only">(current)</span></a></li>
+            <li><a href="{{ path('contract_notice_step1_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Preliminary Questions </a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section I : Object of the contract </a></li>
+            <li><a href="{{ path('contract_notice_step3_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Section II : Legal,economic,financial and technical information </a></li>
+            <li><a href="{{ path('contract_notice_step4_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Section III : Procedure </a></li>
+            <li><a href="{{ path('contract_document_view',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section IV : Documents of the contract </a></li>
+            <li><a href="{{ path('contract_validation',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Validation </a></li>
+          </ul>
+         </div>
+        <div class="col-md-9">
+      <h4 class="sub-header">SECTION I: OBJECT OF THE CONTRACT</h4>
+      <div class="panel panel-default">
+  <div class="panel-body">
+      <h5 class="sub-header">I.1) Description</h5>
+       <div class="panel panel-default">
+       <div class="panel-body">
+           <h6 class="sub-header">I.1.1) TITLE ATTRIBUTED TO THE CONTRACT BY THE PROCURING ENTITY</h6>
+               <div class="row">
+                   <div class="col-md-3">
+                       <span class="label label-default">Title:</span>
+                   </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                           {{ form_errors(form.title) }}       
+                           {{ form_widget(form.title) }}
+                         </div>
+                    </div>
+               </div>
+      </div>
+  </div>
+             <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">I.1.2) SHORT DESCRIPTION OF THE CONTRACT</h6>
+               <div class="row">
+                  <div class="col-md-3">
+                       <span class="label label-default">Short description:</span>
+                   </div>
+                    <div class="col-md-9">    
+                         <div class="form-group">
+                           {{ form_errors(form.description) }}       
+                           {{ form_widget(form.description) }}
+                        </div>
+                    </div>
+                 </div>
+             
+                 </div>
+             </div>    
+       <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">I.1.4) DIVISION INTO LOTS</h6>
+                         <div class="form-group">
+                           {% for hasLotDivision in form.hasLotDivision %}
+                               {{ form_row(hasLotDivision) }}
+                               {{ form_errors(hasLotDivision) }}    
+                             {% endfor %}
+                        </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                       <span class="label label-default">Quantity of lots:</span>
+                   </div>
+                    <div class="col-md-4">    
+                         {{ form_errors(form.lot) }}       
+                         {{ form_widget(form.lot) }}
+                    </div>
+                 </div>
+                    <span class="label label-default">Tenders should be submitted for:</span>
+                     <div class="form-group">
+                           {% for lotSubmissionType in form.lotSubmissionType %}
+                               {{ form_row(lotSubmissionType) }}
+                               {{ form_errors(lotSubmissionType) }}    
+                           {% endfor %}
+                        </div>
+                 </div>
+             </div>
+        <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">I.1.5) VARIANTS WILL BE ACCEPTED</h6>
+                    <div class="form-group">
+                           {% for hasVariants in form.hasVariants %}
+                               {{ form_row(hasVariants) }}
+                               {{ form_errors(hasVariants) }}    
+                             {% endfor %}
+                        </div>  
+                 
+                 </div>
+             </div>
+             </div>
+          </div>
+          <div class="panel panel-default">
+                 <div class="panel-body">
+                   <h6 class="sub-header">I.2) QUANTITY OR SCOPE OF THE CONTRACT</h6>
+                 <div class="panel panel-default">
+                   <div class="panel-body">
+                      <h6 class="sub-header">I.2.1) TOTAL QUANTITY OR SCOPE(including all lots and options)</h6>
+                         <div class="row">
+                            <div class="col-md-3">
+                              <span class="label label-default">Total quantity or scope:</span>
+                            </div>
+                           <div class="col-md-9">    
+                                 <div class="form-group">
+                                 {{ form_errors(form.scope) }}       
+                                 {{ form_widget(form.scope) }}
+                                </div>
+                           </div>
+                        </div>
+                     <h6 class="sub-header">Estimated value(excluding VAT; give figures only)</h6>
+                       <div class="row">
+                       <div class="col-md-6">
+                          <div class="form-group">
+                           {% for estimatedValueType in form.estimatedValueType %}
+                               {{ form_row(estimatedValueType) }}
+                               {{ form_errors(estimatedValueType) }}    
+                             {% endfor %}
+                          </div>
+                            <div class="row">
+                                <div class="col-md-3"> 
+                          <span class="label label-default">Between:</span>
+                                </div>
+                                 <div class="col-md-9">   
+                                <div class="form-group">
+                                 {{ form_errors(form.rangeStartValue) }}       
+                                 {{ form_widget(form.rangeStartValue) }}
+                                </div>
+                                 </div>
+                           </div>
+                               <div class="row">
+                                <div class="col-md-3"> 
+                          <span class="label label-default">And:</span>
+                                </div>
+                                  <div class="col-md-9">       
+                                 <div class="form-group">
+                                 {{ form_errors(form.rangeEndValue) }}       
+                                 {{ form_widget(form.rangeEndValue) }}
+                                </div>
+                                  </div>
+                                   </div>
+                                  <div class="row">
+                                <div class="col-md-3">      
+                          <span class="label label-default">Currency:</span>
+                          </div>
+                                  <div class="col-md-9">   
+                               <div class="form-group">
+                                 {{ form_errors(form.rangeCurrency) }}       
+                                 {{ form_widget(form.rangeCurrency) }}
+                                </div>
+                                   </div> 
+                              </div>     
+                      </div>
+                       <div class="col-md-6">    
+                          <div class="row">
+                               <div class="col-md-4"> 
+                          <span class="label label-default">Estimated value:</span>
+                               </div>
+                               <div class="col-md-8">    
+                                <div class="form-group">
+                                 {{ form_errors(form.exactValue) }}       
+                                 {{ form_widget(form.exactValue) }}
+                                </div>
+                               </div>
+                              </div>
+                           <div class="row">
+                                <div class="col-md-4"> 
+                          <span class="label label-default">Currency:</span>
+                                </div>
+                               <div class="col-md-8">   
+                                <div class="form-group">
+                                 {{ form_errors(form.exactCurrency) }}       
+                                 {{ form_widget(form.exactCurrency) }}
+                                </div>
+                                </div>
+                          </div>
+                      </div>
+                 </div>
+                   </div>
+                 </div>
+                 </div>
+             </div>
+       <div class="panel panel-default">
+                 <div class="panel-body">
+                     <h6 class="sub-header">I.3) DURATION OF THE CONTRACT OR TIME-LIMIT FOR COMPLETION</h6>
+                            <div class="row">
+                       <div class="col-md-7">
+                           <div class="form-group">
+                           {% for contractDurationType in form.contractDurationType %}
+                               {{ form_row(contractDurationType) }}
+                               {{ form_errors(contractDurationType) }}    
+                             {% endfor %}
+                          </div>  
+                              <div class="row">
+                                <div class="col-md-3">
+                          <span class="label label-default">Start date:</span>
+                                </div>
+                                   <div class="col-md-9">
+                                        <div class="form-group">
+                                          {{ form_errors(form.rangeStartDate) }}       
+                                          {{ form_widget(form.rangeStartDate) }}
+                                        </div>
+                                   </div>
+                               </div>
+                                 <div class="row">
+                                     <div class="col-md-3">
+                                  <span class="label label-default">End date:</span>
+                          </div>
+                                <div class="col-md-9">
+                                     <div class="form-group">
+                                          {{ form_errors(form.rangeEndDate) }}       
+                                          {{ form_widget(form.rangeEndDate) }}
+                                       </div>
+                                 </div>
+                           </div>
+                      </div>
+                       <div class="col-md-5">    
+                           <div class="row">
+                               <div class="col-md-12">
+                          <span class="label label-default">(from the award of the contract)</span>
+                               </div>
+                                   <div class="col-md-12">
+                                    <div class="form-group">
+                                     {% for exactDurationType in form.exactDurationType %}
+                                        {{ form_row(exactDurationType) }}
+                                        {{ form_errors(exactDurationType) }}    
+                                     {% endfor %}
+                                      </div>  
+                                    </div>
+                                 <div class="col-md-12">
+                                  <div class="form-group">   
+                             <span class="label label-default">Duration:</span>
+                                  </div>
+                                <div class="form-group">
+                                 {{ form_errors(form.exactDuration) }}       
+                                 {{ form_widget(form.exactDuration) }}
+                                </div>
+                           </div>
+                         </div>
+                      </div>
+                 </div>
+                 </div>
+           </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="pull-left">
+                         {{ form_row(form.previousStep) }}
+                          </div>
+                         <div class="pull-right">
+                         {{ form_row(form.nextStep) }}
+                          </div>
+                      {{ form_end(form) }}
+               </div>
+            </div>
+        </div>
+   </div>
+<script type="text/javascript">
+var $has_lot_division_0 = $('#contract_entity_step2_hasLotDivision_0');
+$has_lot_division_0.change(function() {
+   if (this.checked) {
+          $("#contract_entity_step2_lot" ).prop( "disabled", false );
+          $('#contract_entity_step2_lotSubmissionType_0').prop('disabled', false);
+          $('#contract_entity_step2_lotSubmissionType_1').prop('disabled', false);
+          $('#contract_entity_step2_lotSubmissionType_2').prop('disabled', false);
+        }
+});
+
+var $has_lot_division_1 = $('#contract_entity_step2_hasLotDivision_1');
+$has_lot_division_1.change(function() {
+   if (this.checked) {
+          $('#contract_entity_step2_lot').val("");
+          $("#contract_entity_step2_lot" ).prop( "disabled", true );
+          $('#contract_entity_step2_lotSubmissionType_0').prop('disabled', true);
+          $('#contract_entity_step2_lotSubmissionType_0').prop('checked', false);
+          
+          $('#contract_entity_step2_lotSubmissionType_1').prop('disabled', true);
+          $('#contract_entity_step2_lotSubmissionType_1').prop('checked', false);
+          
+          $('#contract_entity_step2_lotSubmissionType_2').prop('disabled', true);
+          $('#contract_entity_step2_lotSubmissionType_2').prop('checked', false);
+  }
+});
+</script>
+<script type="text/javascript">
+var $estimatedvaluetype_0 = $('#contract_entity_step2_estimatedValueType_0');
+$estimatedvaluetype_0.change(function() {
+   if (this.checked) {
+          $("#contract_entity_step2_exactValue" ).attr( "disabled", false );
+          $('#contract_entity_step2_exactCurrency').attr('disabled', false);
+          
+          $('#contract_entity_step2_rangeStartValue').val("");
+          $('#contract_entity_step2_rangeStartValue').attr('disabled', true);
+          
+          $('#contract_entity_step2_rangeEndValue').val("");
+          $('#contract_entity_step2_rangeEndValue').attr('disabled', true);
+          
+          $('#contract_entity_step2_rangeCurrency').attr('disabled', true);
+        }
+});
+
+var $estimatedvaluetype_1 = $('#contract_entity_step2_estimatedValueType_1');
+$estimatedvaluetype_1.change(function() {
+   if (this.checked) {
+          $('#contract_entity_step2_exactValue').val("");
+          $("#contract_entity_step2_exactValue" ).attr( "disabled", true );
+       
+          $('#contract_entity_step2_exactCurrency').attr('disabled', true);
+          
+          $('#contract_entity_step2_rangeStartValue').attr('disabled', false);
+          $('#contract_entity_step2_rangeEndValue').attr('disabled', false);
+          $('#contract_entity_step2_rangeCurrency').attr('disabled', false);
+       
+  }
+});
+</script>
+<script type="text/javascript">
+var $contractduration_0 = $('#contract_entity_step2_contractDurationType_0');
+$contractduration_0.change(function() {
+   if (this.checked) {
+          $("#contract_entity_step2_exactDurationType_0" ).prop( "disabled", false );
+          $('#contract_entity_step2_exactDurationType_1').prop('disabled', false);
+          $('#contract_entity_step2_exactDuration').prop('disabled', false);
+          
+          $('#contract_entity_step2_rangeStartDate_year').val("");
+          $('#contract_entity_step2_rangeStartDate_year').prop('disabled', true);
+          $('#contract_entity_step2_rangeStartDate_month').val("");
+          $('#contract_entity_step2_rangeStartDate_month').prop('disabled', true);
+          $('#contract_entity_step2_rangeStartDate_day').val("");
+          $('#contract_entity_step2_rangeStartDate_day').prop('disabled', true);
+          
+          $('#contract_entity_step2_rangeEndDate_year').val("");
+          $('#contract_entity_step2_rangeEndDate_year').prop('disabled', true);
+          $('#contract_entity_step2_rangeEndDate_month').val("");
+          $('#contract_entity_step2_rangeEndDate_month').prop('disabled', true);
+          $('#contract_entity_step2_rangeEndDate_day').val("");
+          $('#contract_entity_step2_rangeEndDate_day').prop('disabled', true);
+    
+        }
+});
+
+var $contractduration_1 = $('#contract_entity_step2_contractDurationType_1');
+$contractduration_1.change(function() {
+   if (this.checked) {
+          $("#contract_entity_step2_exactDurationType_0" ).prop( "disabled", true );
+          $("#contract_entity_step2_exactDurationType_0" ).attr( "checked", false );
+          
+          $('#contract_entity_step2_exactDurationType_1').prop('disabled', true);
+          $("#contract_entity_step2_exactDurationType_1" ).attr( "checked", false );
+          $('#contract_entity_step2_exactDuration').prop('disabled', true);
+          $('#contract_entity_step2_exactDuration').val("");
+          
+          $('#contract_entity_step2_rangeStartDate_year').prop('disabled', false);
+          $('#contract_entity_step2_rangeStartDate_month').prop('disabled', false);
+          $('#contract_entity_step2_rangeStartDate_day').prop('disabled', false);
+          
+          $('#contract_entity_step2_rangeEndDate_year').prop('disabled', false);
+          $('#contract_entity_step2_rangeEndDate_month').prop('disabled', false);
+          $('#contract_entity_step2_rangeEndDate_day').prop('disabled', false);       
+    }
+});
+</script>
+{% endblock %}

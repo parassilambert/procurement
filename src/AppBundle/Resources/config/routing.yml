@@ -5,11 +5,11 @@ app_default:
     prefix:   /
         
 app_user:
-    resource: "@AppBundle/Controller/UserController.php"
+    resource: "@AppBundle/Controller/EconomicUserController.php"
     type:     annotation
-    prefix:   /user
+    prefix:   /economic
     
 app_admin:
-    resource: "@AppBundle/Controller/AdminController.php"
+    resource: "@AppBundle/Controller/ContractingUserController.php"
     type:     annotation
-    prefix:   /admin
+    prefix:   /contracting

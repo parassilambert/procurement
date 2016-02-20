@@ -1,0 +1,171 @@
+{% extends '::base.html.twig' %}
+{% block sidebar %}
+{% if is_granted('ROLE_CONTRACTING') %}
+ <nav>
+        <ul class="nav nav-pills nav-stacked">
+           
+               <li role="presentation">
+                      <div class="panel panel-default">
+                       <div class="panel-heading">
+                       <h4 class="panel-title">Login</h4>
+                       </div>
+                       <div class="panel-body">
+                           <P>
+                            You are logged in as {{ app.user.firstname }} {{ app.user.lastname }}
+                           </P>
+                           <a href="{{ path('contracting_logout') }}"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Logout</a>
+                           </div>
+                       </div>
+                   </li>
+                    <li role="presentation">
+                       <div class="panel panel-default">
+                       <div class="panel-heading">
+                       <h4 class="panel-title">Menu</h4>
+                       </div>
+                             <div class="panel-body">
+                             <a href="{{ path('contracting_profile_edit') }}"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Profile</a>
+                               <div style="margin-top:5px"></div>
+                             <a href="{{ path('contracting_home') }}"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>My Dossiers</a>
+                              <div style="margin-top:5px"></div>
+                             <a href="{{ path('contract_notice_list') }}"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>My Contract Notices</a>
+                             
+                             </div>
+                       </div>
+                   </li>
+                    <li role="presentation">
+                       <div class="panel panel-default">
+                       <div class="panel-heading">
+                       <h4 class="panel-title">Information</h4>
+                       </div>
+                       <div class="panel-body">
+                             <a href="#"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>What is e-Tendering</a>
+                               <div style="margin-top:5px"></div>
+                             <a href="#"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>How to Register</a>
+                            
+                       </div>
+                       </div>
+                   </li>
+                    <li role="presentation">
+                       <div class="panel panel-default">
+                       <div class="panel-heading">
+                       <h4 class="panel-title">Opening report</h4>
+                       </div>
+                       <div class="panel-body">
+                             <a href="#"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Search</a>
+                       </div>
+                       </div>
+                   </li>
+                   <li role="presentation">
+                       <div class="panel panel-default">
+                       <div class="panel-heading">
+                       <h3 class="panel-title">System Information</h3>
+                       </div>
+                       <div class="panel-body">
+                         
+                           <ul class="nav nav-pills nav-stacked">
+                               <li role="presentation">
+                                   <h6>
+                                       No maintenance today
+                                   </h6>
+                               </li>
+                           </ul>
+                              
+                       </div>
+                       </div>
+                   </li>
+             </ul>
+</nav>       
+{% else %}
+  {% if error %}
+  <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+  {% endif %} 
+<nav>
+   
+           <ul class="nav nav-pills nav-stacked">
+            
+               <li role="presentation">
+                      <div class="panel panel-default">
+                       <div class="panel-heading">
+                       <h4 class="panel-title">Login</h4>
+                       </div>
+                       <div class="panel-body">
+           <div id="login-content" class="clearfix">
+               <form class="form-horizontal" action="{{ path('contracting_login_check') }}" id="UserLoginForm" method="post" accept-charset="utf-8">
+                  <div style="display:none;">
+                       <input type="hidden" name="_method" value="POST"/>
+                  </div>
+                      <div class="control-group">
+                        <label class="control-label" for="username">Username</label>
+                             <div class="controls">
+                          <input type="text" id="username" name="_username" value="{{ last_username }}" />
+                       </div>
+                      </div>     
+                       
+                      <div class="control-group">
+                        <label class="control-label" for="password">Password</label>
+                       <div class="controls">
+                            <input type="password" id="password" name="_password" />
+                         </div>
+                      </div>
+                       
+                       <div class="control-group">
+                          <div style="margin-top:5px"></div>
+                        
+                          <div class="pull-right">
+                          <button type="submit" class="btn btn-warning btn-large">Login</button>
+                          </div>
+                          
+                      </div> 
+               
+           </form>
+          </div> <!-- /login-content -->
+          <div id="login-extra">
+             <p>
+                   <a href="{{ path('register_contracting') }}" class="btn btn-info btn-large">Create account Here...</a>
+             </p>
+             <p> 
+               <a href="#">Forgot Password? Retrieve.</a>  
+            </p>
+           </div> <!-- /login-extra -->
+   
+            </div>
+                       </div>
+                   </li>
+                    <li role="presentation">
+                       <div class="panel panel-default">
+                       <div class="panel-heading">
+                       <h4 class="panel-title">Information</h4>
+                       </div>
+                       <div class="panel-body">
+                             <a href="#"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>What is e-Tendering</a>
+                               <div style="margin-top:5px"></div>
+                             <a href="#"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>How to Register</a>
+                            
+                       </div>
+                       </div>
+                   </li>
+                   <li role="presentation">
+                       <div class="panel panel-default">
+                       <div class="panel-heading">
+                       <h3 class="panel-title">System Information</h3>
+                       </div>
+                       <div class="panel-body">
+                         
+                           <ul class="nav nav-pills nav-stacked">
+                               <li role="presentation">
+                                   <h6>
+                                       No maintenance today
+                                   </h6>
+                               </li>
+                           </ul>
+                              
+                       </div>
+                       </div>
+                   </li>
+             </ul>
+   </nav>
+{% endif %}
+
+{% endblock %}
+
+

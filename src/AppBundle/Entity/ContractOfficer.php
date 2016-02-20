@@ -30,10 +30,10 @@ class ContractOfficer {
     protected $contract;
     
      /**
-     * @ORM\ManyToOne(targetEntity="AdminUser",inversedBy="associatedContracts")
+     * @ORM\ManyToOne(targetEntity="ContractingUser",inversedBy="associatedContracts")
      * @ORM\JoinColumn(name="contract_officer",referencedColumnName="id")
      */
-    protected $adminUser;
+    protected $contractingUser;
     
     /**
      * @ORM\Column(type="string",length=60)
@@ -110,27 +110,27 @@ class ContractOfficer {
     }
 
     /**
-     * Set adminUser
+     * Set contractingUser
      *
-     * @param \AppBundle\Entity\AdminUser $adminUser
+     * @param \AppBundle\Entity\ContractingUser $contractingUser
      *
      * @return ContractOfficer
      */
-    public function setAdminUser(\AppBundle\Entity\AdminUser $adminUser = null)
+    public function setContractingUser(\AppBundle\Entity\ContractingUser $contractingUser = null)
     {
-        $this->adminUser = $adminUser;
+        $this->contractingUser = $contractingUser;
 
         return $this;
     }
 
     /**
-     * Get adminUser
+     * Get contractingUser
      *
-     * @return \AppBundle\Entity\AdminUser
+     * @return \AppBundle\Entity\ContractingUser
      */
-    public function getAdminUser()
+    public function getContractingUser()
     {
-        return $this->adminUser;
+        return $this->contractingUser;
     }
 
     /**

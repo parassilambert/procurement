@@ -264,10 +264,10 @@ class Contract {
     protected $authorisedPerson;
     
     /**
-     * @ORM\ManyToOne(targetEntity="AdminUser",inversedBy="contracts")
+     * @ORM\ManyToOne(targetEntity="ContractingUser",inversedBy="contracts")
      * @ORM\JoinColumn(name="created_by",referencedColumnName="id")
      */
-    protected $adminUser;
+    protected $contractingUser;
     
     /**
      * @ORM\Column(name="created_at",type="datetime",nullable=true)
@@ -1100,27 +1100,27 @@ class Contract {
     }
 
     /**
-     * Set adminUser
+     * Set contractingUser
      *
-     * @param \AppBundle\Entity\AdminUser $adminUser
+     * @param \AppBundle\Entity\ContractingUser $contractingUser
      *
      * @return Contract
      */
-    public function setAdminUser(\AppBundle\Entity\AdminUser $adminUser = null)
+    public function setContractingUser(\AppBundle\Entity\ContractingUser $contractingUser = null)
     {
-        $this->adminUser = $adminUser;
+        $this->contractingUser = $contractingUser;
 
         return $this;
     }
 
     /**
-     * Get adminUser
+     * Get contractingUser
      *
-     * @return \AppBundle\Entity\AdminUser
+     * @return \AppBundle\Entity\ContractingUser
      */
-    public function getAdminUser()
+    public function getContractingUser()
     {
-        return $this->adminUser;
+        return $this->contractingUser;
     }
 
     /**

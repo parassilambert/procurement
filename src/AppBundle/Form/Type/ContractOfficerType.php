@@ -17,8 +17,8 @@ class ContractOfficerType extends AbstractType{
       public function buildForm(FormBuilderInterface $builder, array $options)
     {
        $builder->add('adminUser', 'entity',  array(
-       'class' => 'AppBundle:AdminUser',
-       'query_builder' => function(\AppBundle\Repository\AdminUserRepository $er) {
+       'class' => 'AppBundle:ContractingUser',
+       'query_builder' => function(\AppBundle\Repository\ContractingUserRepository $er) {
        return $er->createQueryBuilder('u')
                 ->groupBy('u.id')
                 ->orderBy('u.firstname', 'ASC');
