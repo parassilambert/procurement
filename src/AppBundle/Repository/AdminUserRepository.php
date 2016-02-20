@@ -9,7 +9,7 @@
 namespace AppBundle\Repository;
 
 /**
- * Description of AdminUser
+ * Description of AdminUserRepository
  *
  * @author lambert
  */
@@ -19,8 +19,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Doctrine\ORM\EntityRepository;
 
-class ContractingUserRepository extends EntityRepository implements UserProviderInterface{
-    
+class AdminUserRepository extends EntityRepository implements UserProviderInterface{
     public function loadUserByUsername($username)
            {
     $user = $this->createQueryBuilder('u')
@@ -30,7 +29,7 @@ class ContractingUserRepository extends EntityRepository implements UserProvider
                  ->getQuery()
                  ->getOneOrNullResult();
             if (null === $user) {
-              $message = sprintf('Unable to find an active contracting AppBundle:ContractingUser object identified by "%s".',$username);
+              $message = sprintf('Unable to find an active admin AppBundle:AdminUser object identified by "%s".',$username);
                throw new UsernameNotFoundException($message);
                }
             return $user;

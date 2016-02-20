@@ -29,5 +29,4 @@ class ContractingUserType extends AbstractType{
          return 'admin_user';
     }
 
-  
 }
