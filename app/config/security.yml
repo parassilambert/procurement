@@ -4,12 +4,17 @@ security:
        AppBundle\Entity\EconomicUser:
             algorithm: bcrypt
        AppBundle\Entity\ContractingUser:
+            algorithm: bcrypt
+       AppBundle\Entity\AdminUser:
             algorithm: bcrypt     
-    
     providers:
         chain_provider:
             chain:
-                providers: [contracting_user_entity_provider, economic_user_entity_provider]
+                providers: [admin_user_entity_provider, contracting_user_entity_provider, economic_user_entity_provider]
+        admin_user_entity_provider:
+           entity:
+                class: AppBundle:AdminUser
+                property: username
         contracting_user_entity_provider:
            entity:
                 class: AppBundle:ContractingUser
@@ -23,6 +28,18 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        admin_secured_area:
+            pattern: /admin/.*
+            provider: admin_user_entity_provider
+            anonymous: ~
+            form_login:
+                check_path: /admin/login_check
+                login_path: /admin/login
+                always_use_default_target_path: true
+                default_target_path: /admin/index
+            logout:
+                path:   /admin/logout
+                target: /admin/login    
         contracting_secured_area:
             pattern: /contracting/.*
             provider: contracting_user_entity_provider
@@ -35,7 +52,6 @@ security:
             logout:
                 path:   /contracting/logout
                 target: /contracting/login
-           
         economic_secured_area:
             pattern: /economic/.*
             provider: economic_user_entity_provider
@@ -49,23 +65,30 @@ security:
                 path:   /economic/logout
                 target: /economic/login
     access_control:
+        admin_register:
+            path: /admin/register
+            roles: IS_AUTHENTICATED_ANONYMOUSLY
+        admin_create:
+            path: /admin/register/create
+            roles: IS_AUTHENTICATED_ANONYMOUSLY    
+        admin_login:
+            path: /admin/login
+            roles: IS_AUTHENTICATED_ANONYMOUSLY
+        admin_area:
+            path: /admin/.*
+            roles: ROLE_ADMIN
         contracting_register:
             path: /contracting/register
             roles: IS_AUTHENTICATED_ANONYMOUSLY
-           
-            
         contracting_create:
             path: /contracting/register/create
             roles: IS_AUTHENTICATED_ANONYMOUSLY    
-           
         contracting_login:
             path: /contracting/login
             roles: IS_AUTHENTICATED_ANONYMOUSLY
-           
         contracting_area:
             path: /contracting/.*
             roles: ROLE_CONTRACTING
-            
         economic_register:
             path: /economic/register
             roles: IS_AUTHENTICATED_ANONYMOUSLY
@@ -73,14 +96,11 @@ security:
         economic_create:
             path: /economic/register/create
             roles: IS_AUTHENTICATED_ANONYMOUSLY
-            
         economic_login:
             path: /economic/login
             roles: IS_AUTHENTICATED_ANONYMOUSLY
-            
         ecomomic_area:
             path: /economic/.*
             roles: ROLE_ECONOMIC
-           
     access_decision_manager:
         strategy: unanimous

@@ -25,6 +25,7 @@ use AppBundle\Entity\Bid;
 use AppBundle\Entity\Tender;
 use AppBundle\Entity\Portfolio;
 use AppBundle\Entity\Payment;
+use AppBundle\Entity\Audit;
 use AppBundle\Form\Model\EconomicUserRegistration;
 
 class EconomicUserController extends Controller
@@ -45,6 +46,7 @@ class EconomicUserController extends Controller
      /**
      * @Route("/associated_dossier/view", name="user_view_associated_dossier")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function associatedDossierViewAction() {
          $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -59,6 +61,19 @@ class EconomicUserController extends Controller
          $normalizer->setCircularReferenceHandler(function ($object) {
                   return $object->getId();
           });
+          if($dossiers){
+              //Audit
+             $audit = new Audit();
+             $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
+             $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($economicuser->getUsername());
+             $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+             $audit->setFunctionType("Economic");
+             $audit->setEventType("View associated dossier");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
+          }
          $serializer = new Serializer(array($normalizer), array($encoder));
          $jsonContent = $serializer->serialize(array('data'=>$dossiers), 'json');
        return  new Response($jsonContent);
@@ -67,6 +82,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/active_dossier/view", name="user_view_active_dossier")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function activeDossiersViewAction() {
          $em = $this->getDoctrine()->getManager();
@@ -80,6 +96,19 @@ class EconomicUserController extends Controller
          $normalizer->setCircularReferenceHandler(function ($object) {
                   return $object->getId();
           });
+           if($dossiers){
+              //Audit
+             $audit = new Audit();
+             $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
+             $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($economicuser->getUsername());
+             $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+             $audit->setFunctionType("Economic");
+             $audit->setEventType("View active dossier");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
+          }
          $serializer = new Serializer(array($normalizer), array($encoder));
          $jsonContent = $serializer->serialize(array('data'=>$dossiers), 'json');
        return  new Response($jsonContent);
@@ -88,13 +117,27 @@ class EconomicUserController extends Controller
     /**
      * @Route("/active_dossier/{id}/details/view", name="user_view_active_dossier_details")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function activeDossierDetailsViewAction($id) {
          $em = $this->getDoctrine()->getManager();
          $query = $em->createQuery(
                                    'SELECT c.id,c.referenceNumber,c.procedureType,c.status,c.title,c.description,c.paymentCurrency,c.price,c.closingDate FROM AppBundle:Contract c WHERE c.id=:id'
                                    )->setParameter('id',$id);
-         $dossier = $query->getResult(); 
+         $dossier = $query->getResult();
+         if($dossier){
+              //Audit
+             $audit = new Audit();
+             $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
+             $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($economicuser->getUsername());
+             $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+             $audit->setFunctionType("Economic");
+             $audit->setEventType("View active dossier details");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
+          }
          $engine = $this->container->get('templating');
          $content = $engine->render('@AppBundle/Resources/views/User/active_dossier_details.html.twig',array('dossier' => $dossier,'contract'=>$id));
        return $response = new Response($content);
@@ -103,6 +146,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/associated_dossier/{id}/details/view", name="user_view_associated_dossier_details")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function associatedDossierDetailsViewAction($id) {
           $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -114,7 +158,19 @@ class EconomicUserController extends Controller
                  'No bid found for id '.$id
               );
           }
-          
+          if($bid){
+              //Audit
+             $audit = new Audit();
+             $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
+             $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($economicuser->getUsername());
+             $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+             $audit->setFunctionType("Economic");
+             $audit->setEventType("View associated dossier details");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
+          }
          $engine = $this->container->get('templating');
          $content = $engine->render('@AppBundle/Resources/views/User/associated_dossier_details.html.twig',array('bid'=>$bid));
        return $response = new Response($content);
@@ -123,6 +179,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/dossier/{id}/downloads", name="user_view_dossier_downloads")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function dossierDownloadsViewAction($id) {
           $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -134,6 +191,19 @@ class EconomicUserController extends Controller
                  'No bid found for id '.$id
               );
           }
+           if($bid){
+             //Audit
+             $audit = new Audit();
+             $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
+             $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($economicuser->getUsername());
+             $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+             $audit->setFunctionType("Economic");
+             $audit->setEventType("View dossier downloads");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
+          }
          $engine  = $this->container->get('templating');
          $content = $engine->render('@AppBundle/Resources/views/User/downloads.html.twig',array('bid'=>$bid));
        return $response = new Response($content);
@@ -142,6 +212,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/dossier/{id}/downloads/list", name="user_list_dossier_downloads")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function dossierDownloadsListAction($id) {
          $em = $this->getDoctrine()->getManager();
@@ -155,6 +226,19 @@ class EconomicUserController extends Controller
          $normalizer->setCircularReferenceHandler(function ($object) {
             return $object->getId();
          });
+          if($downloads){
+             //Audit
+             $audit = new Audit();
+             $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
+             $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($economicuser->getUsername());
+             $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+             $audit->setFunctionType("Economic");
+             $audit->setEventType("View dossier downloads");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
+          }
          $serializer = new Serializer(array($normalizer), array($encoder));
          $jsonContent = $serializer->serialize(array('data'=>$downloads), 'json');
        return  new Response($jsonContent);
@@ -163,6 +247,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/dossier/{id}/payment", name="user_payment")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function paymentAction($id) {
         // legacy application configures session
@@ -226,6 +311,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/dossier/{id}/bid/new", name="user_new_bid")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function bidNewAction($id) {
          $economicUser = $this->get('security.token_storage')->getToken()->getUser();
@@ -244,11 +330,23 @@ class EconomicUserController extends Controller
             if($contract->getIsPayableDocument()=="Yes"){
             return $this->redirectToRoute('user_payment',array('id'=> $id));
          }else{
-            $bid = new Bid();
-            $bid->setContract($contract);
-            $bid->setEconomicUser($economicUser);
-            $em->persist($bid);
-            $em->flush();
+             $bid = new Bid();
+             $bid->setContract($contract);
+             $bid->setEconomicUser($economicUser);
+             $em->persist($bid);
+             $em->flush();
+             //Audit
+             $audit = new Audit();
+             $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
+             $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($economicuser->getUsername());
+             $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+             $audit->setFunctionType("Economic");
+             $audit->setEventType("New Bid");
+             $audit->setDossier($contract);
+             $em->persist($audit);
+             $em->flush();
+        
            return $this->redirectToRoute('user_view_tender',array('bid'=> $bid,'contract'=>$contract)); 
              }
         }else{
@@ -263,6 +361,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/bid/{id}/tenders", name="user_view_tender")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function tenderViewAction($id) {
           $em = $this->getDoctrine()->getManager();
@@ -281,19 +380,28 @@ class EconomicUserController extends Controller
     /**
      * @Route("/bid/{id}/tender/list", name="user_tender_loader")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function tenderListAction($id) {
          $em = $this->getDoctrine()->getManager();
-         $query = $em->createQuery(
-                                   'SELECT t
-                                    FROM AppBundle:Tender t WHERE t.bid=:id'
-                                   )->setParameter('id',$id);
-         $tenders = $query->getResult(); 
+         $tenders= $em->getRepository('AppBundle:Tender')->findOneBy( array('bid' => $id));
          $encoder = new JsonEncoder();
          $normalizer = new GetSetMethodNormalizer();
          $normalizer->setCircularReferenceHandler(function ($object) {
             return $object->getId();
          });
+         if($tenders){
+             //Audit
+             $audit = new Audit();
+             $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+             $audit->setUsername($economicuser->getUsername());
+             $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+             $audit->setFunctionType("Economic");
+             $audit->setEventType("Load tender");
+             $audit->setDossier($tenders->getBid()->getContract());
+             $em->persist($audit);
+             $em->flush();
+         }
          $serializer = new Serializer(array($normalizer), array($encoder));
          $jsonContent = $serializer->serialize(array('data'=>$tenders), 'json');
        return  new Response($jsonContent);
@@ -302,10 +410,10 @@ class EconomicUserController extends Controller
     /**
      * @Route("/bid/{id}/tender/new", name="user_tender_new")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function tenderNewAction(Request $request,$id) {
           $em = $this->getDoctrine()->getManager();
-          
           $bid = $em->getRepository('AppBundle:Bid')->findOneBy( array('id' => $id));
           if (!$bid) {
                  throw $this->createNotFoundException(
@@ -314,12 +422,21 @@ class EconomicUserController extends Controller
             }
          $tender = new Tender();
          $tender->setBid($bid);
-         
          $form = $this->createForm(new TenderType(), $tender);
          $form->handleRequest($request);
          if ($form->isSubmitted()&& $form->isValid()) {
           $data = $form->getData();
           $em->persist($data);
+          $em->flush();
+          //Audit
+          $audit = new Audit();
+          $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($economicuser->getUsername());
+          $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+          $audit->setFunctionType("Economic");
+          $audit->setEventType("New tender");
+          $audit->setDossier($data->getBid()->getContract());
+          $em->persist($audit);
           $em->flush();
          return $this->redirect($this->generateUrl('user_view_tender',array('id'=> $id)));
          }
@@ -332,6 +449,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/tender/{id}/edit", name="user_edit_tender")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function tenderEditAction(Request $request,$id) {
           $em = $this->getDoctrine()->getManager();
@@ -350,6 +468,16 @@ class EconomicUserController extends Controller
           $data = $form->getData();
           $em->persist($data);
           $em->flush();
+          //Audit
+          $audit = new Audit();
+          $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($economicuser->getUsername());
+          $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+          $audit->setFunctionType("Economic");
+          $audit->setEventType("Edit tender");
+          $audit->setDossier($data->getBid()->getContract());
+          $em->persist($audit);
+          $em->flush();
          return $this->redirect($this->generateUrl('user_view_tender',array('id'=> $tender->getBid()->getId())));
          }
          $engine = $this->container->get('templating');
@@ -361,6 +489,7 @@ class EconomicUserController extends Controller
      /**
      * @Route("/tender/{id}/remove", name="user_remove_tender")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function tenderRemovalAction($id) {
           $em = $this->getDoctrine()->getManager();
@@ -372,13 +501,23 @@ class EconomicUserController extends Controller
             }
           $em->remove($tender);
           $em->flush();
-          
+          //Audit
+          $audit = new Audit();
+          $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($economicuser->getUsername());
+          $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+          $audit->setFunctionType("Economic");
+          $audit->setEventType("Delete tender");
+          $audit->setDossier($tender->getBid()->getContract());
+          $em->persist($audit);
+          $em->flush();
         return $this->redirect($this->generateUrl('user_view_tender',array('id'=> $tender->getBid()->getId())));
       }
     
     /**
      * @Route("/contact_person/edit", name="user_profile_view")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function contactPersonEditAction(Request $request)
     {
@@ -390,6 +529,15 @@ class EconomicUserController extends Controller
            $data = $form->getData();
            $em->persist($data);
            $em->flush();
+          //Audit
+          $audit = new Audit();
+          $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+          $audit->setUsername($economicuser->getUsername());
+          $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+          $audit->setFunctionType("Economic");
+          $audit->setEventType("Edit contact person details");
+          $em->persist($audit);
+          $em->flush();
          }
         return $this->render(
             'AppBundle:User:profile.html.twig',array('form' => $form->createView()));
@@ -398,6 +546,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/company_profile/edit", name="user_company_profile_edit")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function companyProfileEditAction(Request $request)
     {
@@ -409,6 +558,15 @@ class EconomicUserController extends Controller
            $data = $form->getData();
            $em->persist($data);
            $em->flush();
+           //Audit
+           $audit = new Audit();
+           $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+           $audit->setUsername($economicuser->getUsername());
+           $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+           $audit->setFunctionType("Economic");
+           $audit->setEventType("Edit company profile details");
+           $em->persist($audit);
+           $em->flush();
          }
         return $this->render(
             'AppBundle:User:company_profile.html.twig',array('form' => $form->createView()));
@@ -417,6 +575,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/profile_attachment/view", name="user_profile_attachment_view")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function profileAttachmentViewAction()
     {
@@ -429,6 +588,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/profile_attachment/list", name="user_profile_attachment_list")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function profileAttachmentListAction() {
          $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -443,6 +603,17 @@ class EconomicUserController extends Controller
          $normalizer->setCircularReferenceHandler(function ($object) {
             return $object->getId();
          });
+         if($profileAttachments){
+           //Audit
+           $audit = new Audit();
+           $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+           $audit->setUsername($economicuser->getUsername());
+           $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+           $audit->setFunctionType("Economic");
+           $audit->setEventType("Load profile attachment");
+           $em->persist($audit);
+           $em->flush();
+         }
          $serializer = new Serializer(array($normalizer), array($encoder));
          $jsonContent = $serializer->serialize(array('data'=>$profileAttachments), 'json');
        return  new Response($jsonContent);
@@ -450,6 +621,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/profile_attachment/new", name="user_profile_attachment_new")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function profileAttachmentNewAction(Request $request) {
          $em = $this->getDoctrine()->getManager();
@@ -465,7 +637,15 @@ class EconomicUserController extends Controller
           $data = $form->getData();
           $em->persist($data);
           $em->flush();
-          
+           //Audit
+           $audit = new Audit();
+           $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+           $audit->setUsername($economicuser->getUsername());
+           $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+           $audit->setFunctionType("Economic");
+           $audit->setEventType("New profile attachment");
+           $em->persist($audit);
+           $em->flush();
          return $this->redirect($this->generateUrl('user_profile_attachment_view'));
                  
          }
@@ -478,6 +658,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/profile_attachment/{id}/edit", name="user_profile_attachment_edit")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function profileAttachmentEditAction(Request $request,$id) {
           $em = $this->getDoctrine()->getManager();
@@ -495,6 +676,15 @@ class EconomicUserController extends Controller
           $data = $form->getData();
           $em->persist($data);
           $em->flush();
+           //Audit
+           $audit = new Audit();
+           $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+           $audit->setUsername($economicuser->getUsername());
+           $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+           $audit->setFunctionType("Economic");
+           $audit->setEventType("Edit profile attachment");
+           $em->persist($audit);
+           $em->flush();
          return $this->redirect($this->generateUrl('user_profile_attachment_view'));
          }
          $engine = $this->container->get('templating');
@@ -505,6 +695,7 @@ class EconomicUserController extends Controller
      /**
      * @Route("/profile_attachmen/{id}/remove", name="user_profile_attachment_remove")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function profileAttachmentRemoveAction($id) {
           $em = $this->getDoctrine()->getManager();
@@ -516,13 +707,22 @@ class EconomicUserController extends Controller
             }
           $em->remove($profileAttachment);
           $em->flush();
-          
+           //Audit
+           $audit = new Audit();
+           $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+           $audit->setUsername($economicuser->getUsername());
+           $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+           $audit->setFunctionType("Economic");
+           $audit->setEventType("Delete profile attachment");
+           $em->persist($audit);
+           $em->flush();
         return $this->redirect($this->generateUrl('user_profile_attachment_view'));
       }
     
     /**
      * @Route("/profile_account/view", name="user_profile_account_view")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function profileAccountViewAction()
     {
@@ -534,6 +734,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/profile_password/edit", name="user_profile_password_edit")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function profilePasswordEditAction(Request $request)
     {
@@ -546,6 +747,15 @@ class EconomicUserController extends Controller
            $this->encodePassword($data);
            $em->persist($data);
            $em->flush();
+            //Audit
+           $audit = new Audit();
+           $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+           $audit->setUsername($economicuser->getUsername());
+           $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+           $audit->setFunctionType("Economic");
+           $audit->setEventType("Edit profile password");
+           $em->persist($audit);
+           $em->flush();
           return $this->redirect($this->generateUrl('user_profile_account_view'));
          }
         return $this->render(
@@ -555,6 +765,7 @@ class EconomicUserController extends Controller
     /**
      * @Route("/profile_logo/edit", name="user_profile_logo_edit")
      * @Template()
+     * @Security("has_role('ROLE_ECONOMIC')")
      */
     public function profileLogoEditAction(Request $request)
     {
@@ -566,6 +777,15 @@ class EconomicUserController extends Controller
            $data = $form->getData();
            $data->setUpdatedAt(new \DateTime());
            $em->persist($data);
+           $em->flush();
+            //Audit
+           $audit = new Audit();
+           $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+           $audit->setUsername($economicuser->getUsername());
+           $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+           $audit->setFunctionType("Economic");
+           $audit->setEventType("Edit profile logo");
+           $em->persist($audit);
            $em->flush();
           return $this->redirect($this->generateUrl('user_profile_account_view'));
          }
@@ -617,6 +837,14 @@ class EconomicUserController extends Controller
         
         $em->persist($registration->getUser());
         $em->flush();
+           //Audit
+           $audit = new Audit();
+           $audit->setUsername($registration->getUser()->getUsername());
+           $audit->setName($registration->getUser()->getFirstname()." ".$registration->getUser()->getLastname());
+           $audit->setFunctionType("Economic");
+           $audit->setEventType("SignUp");
+           $em->persist($audit);
+           $em->flush();
         $this->authenticate($registration->getUser(),self::PROVIDER_KEY_USER);
         return $this->redirectToRoute('user_home');
     }
@@ -653,6 +881,16 @@ class EconomicUserController extends Controller
     // last username entered by the user
     $lastUsername = $authenticationUtils->getLastUsername();
 
+    //Audit
+    $audit = new Audit();
+    $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+    $audit->setUsername($economicuser->getUsername());
+    $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+    $audit->setFunctionType("Economic");
+    $audit->setEventType("Login");
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($audit);
+    $em->flush();
     $engine = $this->container->get('templating');
     $content = $engine->render('@AppBundle/Resources/views/User/login.html.twig',
         array(
@@ -662,6 +900,8 @@ class EconomicUserController extends Controller
         ));
     
     return $response = new Response($content);
+    
+    
     }
     /**
      * @Route("/login_check", name="user_login_check")
@@ -679,6 +919,16 @@ class EconomicUserController extends Controller
     public function logoutAction()
     {
         // The security layer will intercept this request
+        //Audit
+        $audit = new Audit();
+        $economicuser = $this->get('security.token_storage')->getToken()->getUser();
+        $audit->setUsername($economicuser->getUsername());
+        $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
+        $audit->setFunctionType("Economic");
+        $audit->setEventType("Logout");
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($audit);
+        $em->flush();
     }
      
 }

@@ -63,7 +63,6 @@ class ContractingUserController extends Controller{
      * @Security("has_role('ROLE_CONTRACTING')")
      */
     public function contractListAction(Request $request){
-       
         $em = $this->getDoctrine()->getManager();
         $contracts = $em->getRepository('AppBundle:Contract')
                         ->findBy(array(), array('updatedAt' => 'DESC')); 
@@ -74,7 +73,6 @@ class ContractingUserController extends Controller{
           });
         $serializer = new Serializer(array($normalizer), array($encoder));
         $jsonContent = $serializer->serialize(array('data'=>$contracts), 'json');
-        
         if ($contracts) {
           $audit = new Audit();
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -93,8 +91,6 @@ class ContractingUserController extends Controller{
      * @Security("has_role('ROLE_CONTRACTING')")
      */
     public function contractViewAction(){
-        
-        
        $engine = $this->container->get('templating');
        $content = $engine->render('@AppBundle/Resources/views/Contracting/contract_notices.html.twig');
        return $response = new Response($content);
@@ -110,7 +106,6 @@ class ContractingUserController extends Controller{
          $contract->setReferenceNumber(uniqid());
          $contract->setContractingUser($contractingUser);
          $contract->setStatus("Draft");
-        
          $form = $this->createForm(new ContractStep1Type(), $contract);
          $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -118,7 +113,6 @@ class ContractingUserController extends Controller{
              $em = $this->getDoctrine()->getManager();
              $em->persist($data);
              $em->flush();
-             
              //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -129,7 +123,6 @@ class ContractingUserController extends Controller{
              $audit->setDossier($data);
              $em->persist($audit);
              $em->flush(); 
-       
              if($form->get('save')->isClicked())
              {
                 return $this->redirectToRoute('contract_notice_step1_edit',array('id'=>$contract->getId()),301);
@@ -161,7 +154,6 @@ class ContractingUserController extends Controller{
              $data = $form->getData();
              $em->persist($data);
              $em->flush();
-             
              //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -172,7 +164,6 @@ class ContractingUserController extends Controller{
              $audit->setDossier($data);
              $em->persist($audit);
              $em->flush(); 
-             
              if($form->get('save')->isClicked())
                {
                 return $this->redirectToRoute('contract_notice_step1_edit',array('id'=>$id),301);
@@ -199,15 +190,13 @@ class ContractingUserController extends Controller{
                  'No contract found for id '.$id
               );
           }
-         
          $form = $this->createForm(new ContractStep2Type(), $contract);
          $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $em->persist($data);
             $em->flush();
-            
-            //Audit
+             //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
              $audit->setUsername($contracting->getUsername());
@@ -217,7 +206,6 @@ class ContractingUserController extends Controller{
              $audit->setDossier($data);
              $em->persist($audit);
              $em->flush();
-             
            if($form->get('previousStep')->isClicked())
              {
                 return $this->redirectToRoute('contract_notice_step1_edit',array('id'=>$id),301);
@@ -237,7 +225,6 @@ class ContractingUserController extends Controller{
      * @Security("has_role('ROLE_CONTRACTING')")
      */
     public function contractStep3EditAction(Request $request,$id) {
-         
          $em = $this->getDoctrine()->getManager();
          $contract = $em->getRepository('AppBundle:Contract')
                          ->findOneBy( array('id' => $id));
@@ -252,7 +239,6 @@ class ContractingUserController extends Controller{
              $data = $form->getData();
              $em->persist($data);
              $em->flush();
-             
              //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -263,7 +249,6 @@ class ContractingUserController extends Controller{
              $audit->setDossier($data);
              $em->persist($audit);
              $em->flush();
-             
              if($form->get('previousStep')->isClicked())
              {
                 return $this->redirectToRoute('contract_notice_step2_edit',array('id'=>$id),301);
@@ -283,7 +268,6 @@ class ContractingUserController extends Controller{
      * @Security("has_role('ROLE_CONTRACTING')")
      */
     public function contractStep4EditAction(Request $request,$id) {
-         
          $em = $this->getDoctrine()->getManager();
          $contract = $em->getRepository('AppBundle:Contract')
                          ->findOneBy( array('id' => $id));
@@ -309,7 +293,6 @@ class ContractingUserController extends Controller{
              $data = $form->getData();
              $em->persist($data);
              $em->flush();
-             
              //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -320,7 +303,6 @@ class ContractingUserController extends Controller{
              $audit->setDossier($data);
              $em->persist($audit);
              $em->flush();
-             
              if($form->get('previousStep')->isClicked())
              {
                 return $this->redirectToRoute('contract_notice_step3_edit',array('id'=>$id),301);
@@ -345,7 +327,6 @@ class ContractingUserController extends Controller{
         $em = $this->getDoctrine()->getManager();
         $contractdocuments = $em->getRepository('AppBundle:ContractDocument')
                         ->findBy(array('contract' => $id));
-       
         $encoder = new JsonEncoder();
         $normalizer = new GetSetMethodNormalizer();
         $normalizer->setCircularReferenceHandler(function ($object) {
@@ -353,7 +334,6 @@ class ContractingUserController extends Controller{
           });
         $serializer = new Serializer(array($normalizer), array($encoder));
         $jsonContent = $serializer->serialize(array('data'=>$contractdocuments), 'json');
-             
         if($contractdocuments){
              //Audit
              $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
@@ -383,9 +363,6 @@ class ContractingUserController extends Controller{
             'No record found for contract with id'.$id
               );
             }
-            
-               
-            
         $engine  = $this->container->get('templating');
         $content = $engine->render('@AppBundle/Resources/views/Contracting/contract_notice_section_IV.html.twig',array('contract'=>$contract));
       return $response = new Response($content);
@@ -412,7 +389,6 @@ class ContractingUserController extends Controller{
           $data = $form->getData();
           $em->persist($data);
           $em->flush();
-          
           //Audit
           $audit = new Audit();
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -423,7 +399,6 @@ class ContractingUserController extends Controller{
           $audit->setDossier($contract);
           $em->persist($audit);
           $em->flush(); 
-       
          return $this->redirect($this->generateUrl('contract_document_view',array('id'=> $id)));
          }
          $engine = $this->container->get('templating');
@@ -437,7 +412,6 @@ class ContractingUserController extends Controller{
      * @Security("has_role('ROLE_CONTRACTING')")
      */
     public function contractDocumentEditAction(Request $request, $id) {
-       
           $em = $this->getDoctrine()->getManager();
           $contractdocument = $em->getRepository('AppBundle:ContractDocument')->findOneBy( array('id' => $id));
           if (!$contractdocument) {
@@ -451,7 +425,6 @@ class ContractingUserController extends Controller{
           $data = $form->getData();
           $em->persist($data);
           $em->flush();
-          
           //Audit
           $audit = new Audit();
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -462,7 +435,6 @@ class ContractingUserController extends Controller{
           $audit->setDossier($contractdocument->getContract());
           $em->persist($audit);
           $em->flush();
-          
          return $this->redirect($this->generateUrl('contract_document_view',array('id'=> $contractdocument->getContract()->getId())));
          }
          $engine = $this->container->get('templating');
@@ -484,9 +456,8 @@ class ContractingUserController extends Controller{
                 'No record found for contract document with id'.$id
               );
             }
-         $em->remove($contractdocument);
-         $em->flush();
-        
+          $em->remove($contractdocument);
+          $em->flush();
           //Audit
           $audit = new Audit();
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -497,7 +468,6 @@ class ContractingUserController extends Controller{
           $audit->setDossier($contractdocument->getContract());
           $em->persist($audit);
           $em->flush();
-          
         return $this->redirect($this->generateUrl('contract_document_view',array('id'=> $contractdocument->getContract()->getId())));
       }
       
@@ -514,7 +484,6 @@ class ContractingUserController extends Controller{
             'No record found for contract with id'.$id
               );
             }
-        
           //Audit
           $audit = new Audit();
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -525,7 +494,6 @@ class ContractingUserController extends Controller{
           $audit->setDossier($contract);
           $em->persist($audit);
           $em->flush();    
-            
         $validator = $this->get('validator');
         $errors = $validator->validate($contract, null, array('validationStep1','validationStep2','validationStep3','validationStep4'));
         if (count($errors) > 0) {
@@ -544,7 +512,6 @@ class ContractingUserController extends Controller{
      * @Security("has_role('ROLE_CONTRACTING')")
      */
     public function contractRemoveAction($id) {
-        
           $em = $this->getDoctrine()->getManager();
           $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
           if (!$contract) {
@@ -554,7 +521,6 @@ class ContractingUserController extends Controller{
             }
           $em->remove($contract);
           $em->flush();
-         
           //Audit
           $audit = new Audit();
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -565,7 +531,6 @@ class ContractingUserController extends Controller{
           $audit->setDossier($contract);
           $em->persist($audit);
           $em->flush();
-          
         return $this->redirect($this->generateUrl('contract_notice_list'));
       }
        /**
@@ -582,15 +547,13 @@ class ContractingUserController extends Controller{
                 'No record found for contract with id'.$id
               );
             }
-         $contract->setStatus("Submission Opened");
-         
-         $contractofficer = new ContractOfficer();
-         $contractofficer->setContractingUser($contractingUser);
-         $contractofficer->setContract($contract);
-         $contractofficer->setPermission("Owner");
-         $em->persist($contractofficer);
-         $em->flush();
-         
+          $contract->setStatus("Submission Opened");
+          $contractofficer = new ContractOfficer();
+          $contractofficer->setContractingUser($contractingUser);
+          $contractofficer->setContract($contract);
+          $contractofficer->setPermission("Opener");
+          $em->persist($contractofficer);
+          $em->flush();
           //Audit
           $audit = new Audit();
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -601,7 +564,6 @@ class ContractingUserController extends Controller{
           $audit->setDossier($contract);
           $em->persist($audit);
           $em->flush();
-          
         return $this->redirect($this->generateUrl('contract_notice_list'));
       }
       
@@ -705,13 +667,8 @@ class ContractingUserController extends Controller{
               );
             }
             
-           $contract = $em->getRepository('AppBundle:Contract')
+          $contract = $em->getRepository('AppBundle:Contract')
                          ->findOneBy( array('id' => $id));
-           if (!$contract) {
-                 throw $this->createNotFoundException(
-                'No record found for contract with id'.$id
-              );
-            } 
           //Audit
           $audit = new Audit();
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -735,10 +692,8 @@ class ContractingUserController extends Controller{
      * @Security("has_role('ROLE_CONTRACTING')")
      */
     public function dossierAssociatedOfficersViewAction($id) {
-        
          $engine = $this->container->get('templating');
          $content = $engine->render('@AppBundle/Resources/views/Contracting/dossier_associated_officer.html.twig',array('contract'=>$id));
-    
        return $response = new Response($content);
     }
     
@@ -809,11 +764,6 @@ class ContractingUserController extends Controller{
           $audit = new Audit();
           $contract = $em->getRepository('AppBundle:Contract')
                          ->findOneBy( array('id' => $id));
-          if (!$contract) {
-                 throw $this->createNotFoundException(
-                'No record found for contract with id'.$id
-              );
-           }
           $contracting = $this->get('security.token_storage')->getToken()->getUser();
           $audit->setUsername($contracting->getUsername());
           $audit->setName($contracting->getFirstname()." ".$contracting->getLastname());
@@ -822,8 +772,7 @@ class ContractingUserController extends Controller{
           $audit->setDossier($contract);
           $em->persist($audit);
           $em->flush();
-          
-          return $this->redirectToRoute('contracting_view_dossier_associated_officers',array('id'=> $id),301);
+        return $this->redirectToRoute('contracting_view_dossier_associated_officers',array('id'=> $id),301);
          } 
          $engine = $this->container->get('templating');
          $content = $engine->render('@AppBundle/Resources/views/Contracting/new_dossier_associated_officer.html.twig',array('form' => $form->createView()));
@@ -872,7 +821,6 @@ class ContractingUserController extends Controller{
                  'No contract found for id '.$id
               );
           }
-         
           if($contract->getProcedureType()=="Open"){
              throw $this->createAccessDeniedException('Prequalification is done only to restricted contracts');
           }else{
@@ -944,15 +892,9 @@ class ContractingUserController extends Controller{
              $recipient= $data->getCompanyName()->getEmail();
              $em->persist($data);
              $em->flush();
-             
              //Audit
              $contract = $em->getRepository('AppBundle:Contract')
                          ->findOneBy( array('id' => $id));
-             if (!$contract) {
-                 throw $this->createNotFoundException(
-                'No record found for contract with id'.$id
-              );
-             }
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
              $audit->setUsername($contracting->getUsername());
@@ -1000,9 +942,8 @@ class ContractingUserController extends Controller{
                 'No record found for prequalifed company with id'.$id
               );
             }
-            $em->remove($prequalified);
-            $em->flush();
-          
+             $em->remove($prequalified);
+             $em->flush();
              //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -1022,10 +963,8 @@ class ContractingUserController extends Controller{
       * @Security("has_role('ROLE_CONTRACTING')")
       */
      public function tenderOpenAction($id) {
-        
          $engine  = $this->container->get('templating');
          $content = $engine->render('@AppBundle/Resources/views/Contracting/tender_opening.html.twig',array('contract'=>$id));
-    
         return $response = new Response($content);
      }
      
@@ -1039,11 +978,6 @@ class ContractingUserController extends Controller{
              //Audit
              $contract = $em->getRepository('AppBundle:Contract')
                          ->findOneBy( array('id' => $id));
-             if (!$contract) {
-                 throw $this->createNotFoundException(
-                'No record found for contract with id'.$id
-              );
-             }
              //Audit
              if($bid){
              $audit = new Audit();
@@ -1083,7 +1017,6 @@ class ContractingUserController extends Controller{
             $em->persist($data);
             $em->flush();
              //Audit
-             
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
              $audit->setUsername($contracting->getUsername());
@@ -1116,7 +1049,6 @@ class ContractingUserController extends Controller{
             }
           $em->remove($bidevaluation);
           $em->flush();
-          
              //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -1166,7 +1098,6 @@ class ContractingUserController extends Controller{
      */
     public function profileAccountViewAction()
     {
-        $contractinguser = $this->get('security.token_storage')->getToken()->getUser();
              //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
@@ -1178,7 +1109,7 @@ class ContractingUserController extends Controller{
              $em->persist($audit);
              $em->flush();
         return $this->render(
-            'AppBundle:Contracting:profile_account.html.twig',array('user' => $contractinguser));
+            'AppBundle:Contracting:profile_account.html.twig',array('user' => $contracting));
      } 
      
     /**
@@ -1227,29 +1158,21 @@ class ContractingUserController extends Controller{
             array('form' => $form->createView()));
     }
     
-      /**
+    /**
      * @Route("/register/create", name="create_contracting")
      * @Template()      
      */
      public function newContractingAction(Request $request)
     {
-    
     $em = $this->getDoctrine()->getManager();
-
     $form = $this->createForm(new ContractingUserRegistrationType(), new ContractingUserRegistration());
-
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
-        
         $registration = $form->getData();
-        
         $this->encodePassword($registration->getUser());
-        
         $em->persist($registration->getUser());
         $em->flush();
-       
-         //Audit
+             //Audit
              $audit = new Audit();
              $audit->setUsername($registration->getUser()->getUsername());
              $audit->setName($registration->getUser()->getFirstname()." ".$registration->getUser()->getLastname());
@@ -1257,12 +1180,9 @@ class ContractingUserController extends Controller{
              $audit->setEventType("SignUp");
              $em->persist($audit);
              $em->flush();
-        
         $this->authenticate($registration->getUser(),self::PROVIDER_KEY_CONTRACTING);
-        
-        return $this->redirectToRoute('contracting_home');
+     return $this->redirectToRoute('contracting_home');
     }
-
        return $this->render(
         'AppBundle:Contracting:register.html.twig',
         array('form' => $form->createView())
@@ -1273,7 +1193,6 @@ class ContractingUserController extends Controller{
     {
         $encoder = $this->container->get('security.password_encoder');
         $encoded = $encoder->encodePassword($user, $user->getPassword());
-
         $user->setPassword($encoded);
     }
     
@@ -1289,13 +1208,10 @@ class ContractingUserController extends Controller{
     public function loginAction()
     {
     $authenticationUtils = $this->get('security.authentication_utils');
-
     // get the login error if there is one
     $error = $authenticationUtils->getLastAuthenticationError();
-
     // last username entered by the user
     $lastUsername = $authenticationUtils->getLastUsername();
-
     $engine = $this->container->get('templating');
     $content = $engine->render('@AppBundle/Resources/views/Contracting/login.html.twig',
         array(
@@ -1303,7 +1219,6 @@ class ContractingUserController extends Controller{
             'last_username' => $lastUsername,
             'error'         => $error,
         ));
-    
     return $response = new Response($content);
     }
      /**
@@ -1333,7 +1248,7 @@ class ContractingUserController extends Controller{
     public function logoutAction()
     {
         // The security layer will intercept this request
-         //Audit
+             //Audit
              $audit = new Audit();
              $contracting = $this->get('security.token_storage')->getToken()->getUser();
              $audit->setUsername($contracting->getUsername());
