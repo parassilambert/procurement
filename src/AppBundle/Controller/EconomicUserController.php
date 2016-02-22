@@ -21,6 +21,7 @@ use AppBundle\Form\Type\CompanyProfileType;
 use AppBundle\Form\Type\PortfolioType;
 use AppBundle\Form\Type\ChangePasswordType;
 use AppBundle\Form\Type\ProfileLogoType;
+use AppBundle\Form\Type\EconomicUserRegistrationType;
 use AppBundle\Entity\Bid;
 use AppBundle\Entity\Tender;
 use AppBundle\Entity\Portfolio;
@@ -86,11 +87,7 @@ class EconomicUserController extends Controller
      */
     public function activeDossiersViewAction() {
          $em = $this->getDoctrine()->getManager();
-         $query = $em->createQuery(
-                                   'SELECT c.id,c.referenceNumber,c.title,c.procedureType,c.status
-                                    FROM AppBundle:Contract c WHERE c.status=:status'
-                                   )->setParameter('status',"Submission Opened");
-         $dossiers = $query->getResult(); 
+         $dossiers = $em->getRepository('AppBundle:Contract')->findBy( array('status' => "Submission Opened"));
          $encoder = new JsonEncoder();
          $normalizer = new GetSetMethodNormalizer();
          $normalizer->setCircularReferenceHandler(function ($object) {
@@ -99,13 +96,11 @@ class EconomicUserController extends Controller
            if($dossiers){
               //Audit
              $audit = new Audit();
-             $contract = $em->getRepository('AppBundle:Contract')->findOneBy( array('id' => $id));
              $economicuser = $this->get('security.token_storage')->getToken()->getUser();
              $audit->setUsername($economicuser->getUsername());
              $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
              $audit->setFunctionType("Economic");
              $audit->setEventType("View active dossier");
-             $audit->setDossier($contract);
              $em->persist($audit);
              $em->flush();
           }
@@ -881,16 +876,6 @@ class EconomicUserController extends Controller
     // last username entered by the user
     $lastUsername = $authenticationUtils->getLastUsername();
 
-    //Audit
-    $audit = new Audit();
-    $economicuser = $this->get('security.token_storage')->getToken()->getUser();
-    $audit->setUsername($economicuser->getUsername());
-    $audit->setName($economicuser->getFirstname()." ".$economicuser->getLastname());
-    $audit->setFunctionType("Economic");
-    $audit->setEventType("Login");
-    $em = $this->getDoctrine()->getManager();
-    $em->persist($audit);
-    $em->flush();
     $engine = $this->container->get('templating');
     $content = $engine->render('@AppBundle/Resources/views/User/login.html.twig',
         array(

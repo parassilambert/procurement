@@ -24,7 +24,7 @@
   </div>
   <div class="panel-body">
       <div class="pull-right">
-                 <img src="{{ asset('images/Logo.PNG') }}" width="150" height="120" alt="IFMIS Logo" title="IFMIS Logo" />
+                 <img src="{{ asset('images/Logo.png') }}" width="150" height="120" alt="IFMIS Logo" title="IFMIS Logo" />
 
               </div>
           <div style="margin-top:150px"></div>
@@ -39,7 +39,7 @@
             </td>
         </tr>
        
-        <tr><th>Tender Ref No</th>
+        <tr><th>Dossier Ref No</th>
             <td>
                 {{ dossier.referenceNumber }}
             </td></tr>
@@ -53,7 +53,7 @@
             <td>
                 {{ dossier.status}}
             </td></tr>
-         <tr><th>Tender deadline</th>
+         <tr><th>Dossier deadline</th>
          <td>
                 {{ dossier.closingDate|date("d/m/Y h:m:s")}}
                 
