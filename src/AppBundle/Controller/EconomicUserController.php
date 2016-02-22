@@ -25,7 +25,6 @@ use AppBundle\Form\Type\EconomicUserRegistrationType;
 use AppBundle\Entity\Bid;
 use AppBundle\Entity\Tender;
 use AppBundle\Entity\Portfolio;
-use AppBundle\Entity\Payment;
 use AppBundle\Entity\Audit;
 use AppBundle\Form\Model\EconomicUserRegistration;
 
@@ -264,32 +263,7 @@ class EconomicUserController extends Controller
       return $response = new Response($content);
     }
     
-      /**
-     * @Route("/paymentgateway", name="payment_gateway")
-     * @Template()
-     */    
- public function recievePaymentAction(Request $request){
- 
-        $payment = new Payment();
-      
-        $payment->setBusinessNumber($request->request->get('business_number'));
-        $payment->setTransactionReference($request->request->get('transaction_reference'));
-        $payment->setInternalTransactionId($request->request->get('internal_transaction_id'));
-        $payment->setTransactionTimestamp($request->request->get('transaction_timestamp'));
-        $payment->setTransactionType($request->request->get('transaction_type'));
-        $payment->setAccountNumber($request->request->get('account_number'));
-        $payment->setSenderPhone($request->request->get('sender_phone'));
-        $payment->setFirstName($request->request->get('first_name'));
-        $payment->setMiddleName($request->request->get('middle_name'));
-        $payment->setLastName($request->request->get('last_name'));
-        $payment->setAmount($request->request->get('amount'));
-        $payment->setCurrency($request->request->get('currency'));
-        $payment->setSignature($request->request->get('signature'));
-        
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($payment);
-        $em->flush();
-    }
+
     
     /**
      * @Route("/dossier/{id}/confirmpayment", name="user_confirm_payment")
