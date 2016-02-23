@@ -12,7 +12,7 @@ class DefaultController extends Controller{
      * @Template()
      */    
  public function recievePaymentAction(Request $request){
- 
+     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
         $payment = new Payment();
       
         $payment->setBusinessNumber($request->request->get('business_number'));
@@ -32,6 +32,7 @@ class DefaultController extends Controller{
         $em = $this->getDoctrine()->getManager();
         $em->persist($payment);
         $em->flush();
+     }
     }
 }
 
