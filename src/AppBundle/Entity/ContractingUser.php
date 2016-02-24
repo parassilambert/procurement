@@ -376,4 +376,6 @@ class ContractingUser implements UserInterface,  \Serializable{
     public function __toString() {
         return $this->firstname." ".$this->lastname;
     }
+
+   
 }
