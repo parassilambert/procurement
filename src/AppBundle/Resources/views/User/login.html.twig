@@ -1,0 +1,64 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block body %}
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                <h3 class="page-header">Welcome to the e-Tendering Platform</h3>
+                    </div>
+                </div> 
+                 <div class="row">
+                     <div class="col-md-8">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">                      
+                            <div class="col-md-4">
+                               <img src="{{ asset('images/Logo.png') }}" width="150" height="120" alt="IFMIS Logo" title="IFMIS Logo" />
+                                </div>
+                            <div class="col-md-8">
+                           <P>
+                           e-Tendering is an open,secure,interoprable, and reconfigurable e-procurement platform based on open Kenyan standards and PPOA directives where procuring entities and tenderers can perform their daily e-procurement activities
+                           </P>
+                            </div>
+                       </div>
+                     </div>
+                </div>
+                         </div>
+                     </div>
+                
+                <h3><span class="label label-info">Services</span></h3>
+                  
+                <div class="row">
+                    <div class="col-md-6">
+                  <div style="margin-top:10px"></div>       
+                <div class="panel panel-info">
+                   <div class="panel-heading">
+                <h3 class="panel-title">Procuring Entities Services</h3>
+                  </div>
+                <div class="panel-body">
+                    <p>
+                    Offers to procuring entities a collaborative 
+                    e-procurement environment for organising their tender-related activities, 
+                    provides the tools for supporting the management of a tender dossier covering the visualisation, modification, submission, qualification, opening of a tender.
+                    </p>
+                    </div>
+                  </div>
+                            </div>
+                      <div class="col-md-6">
+                 <div style="margin-top:10px"></div>       
+                <div class="panel panel-info">
+                   <div class="panel-heading">
+                <h3 class="panel-title">Tenderers Services</h3>
+                  </div>
+                <div class="panel-body">
+                    <p>
+                    Tenderers services provides the tools and services for carrying out automated, transparent and safe preparation and submission of request for participation or tenders.
+                    It provides a non-discriminatory solution on fundamental procurement aspects and process for allowing tenderers and candidates to carry out efficiently their procurement activities, thus assisting on the acceleration of the tender preparation and submission procedures.
+                    </p>
+                    <p>
+                         <a href="{{ path('register_user') }}" class="btn btn-info btn-large">Register</a>   </p>
+                    </div>
+                  </div>
+                </div>  
+            </div>       
+{% endblock %}
+

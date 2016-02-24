@@ -1,0 +1,120 @@
+{% extends 'AppBundle::contracting.html.twig' %}
+{% block body %}
+{{ form_start(form, {'attr': {'class': 'my-form-class'} }) }}
+{{ form_errors(form) }}
+   <div class="row">
+     <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"  aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+             <a class="navbar-brand" href="#"> CONTRACT NOTICE - {{ contract.referenceNumber }} : {{ contract.title }} </a>
+        </div>
+         <div id="navbar" class="navbar-collapse collapse">
+           <ul class="nav navbar-nav navbar-right">
+            <li>
+                 {{ form_widget(form.save) }}
+              </li>
+            </ul>
+        </div>
+        </div>
+      </nav>
+       {% if contract.id is empty %}
+            <div class="col-sm-9 col-md-12">
+      <h4 class="sub-header">PRELIMINARY QUESTIONS</h4>
+       <div class="panel panel-default">
+  <div class="panel-body">
+      <h5 class="sub-header">SELECT TYPE OF CONTRACT AND PROCEDURE</h5>
+       <div class="panel panel-default">
+       <div class="panel-body">
+           <h6 class="sub-header">TYPE OF CONTRACT</h6>
+               <div class="row">
+                  {% for c_type in form.contractType %}
+                  {{ form_row(c_type) }}
+                  {{ form_errors(c_type) }}      
+                  {% endfor %}
+               </div>
+      </div>
+  </div>
+        <div class="panel panel-default">
+                 <div class="panel-body">
+            <h6 class="sub-header">TYPE OF PROCEDURE</h6>
+               <div class="row">
+                 {% for p_type in form.procedureType %}
+                   {{ form_row(p_type) }}
+                   {{ form_errors(p_type) }}    
+                 {% endfor %}
+               </div>
+              </div>
+             </div>
+          </div>
+          </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="pull-right">
+                          {{ form_row(form.nextStep) }}
+                          {{ form_end(form) }}
+                  </div>
+            </div>
+            </div>
+        </div>
+       {% else %}
+        <div class="col-sm-4 col-md-3">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Completing the form...<span class="sr-only">(current)</span></a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Preliminary Questions </a></li>
+            <li><a href="{{ path('contract_notice_step2_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Section I : Object of the contract </a></li>
+            <li><a href="{{ path('contract_notice_step3_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Section II : Legal,economic,financial and technical information </a></li>
+            <li><a href="{{ path('contract_notice_step4_edit',{'id':contract.id}) }}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Section III : Procedure </a></li>
+            <li><a href="{{ path('contract_document_view',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Section IV : Documents of the contract </a></li>
+            <li><a href="{{ path('contract_validation',{'id':contract.id}) }}"><span class="glyphicon glyphicon-record" aria-hidden="true"></span> Validation </a></li>
+          </ul>
+         </div>
+        <div class="col-sm-10 col-md-9">
+      <h4 class="sub-header">PRELIMINARY QUESTIONS</h4>
+      
+       <div class="panel panel-default">
+  <div class="panel-body">
+      <h5 class="sub-header">SELECT TYPE OF CONTRACT AND PROCEDURE</h5>
+       <div class="panel panel-default">
+       <div class="panel-body">
+           <h6 class="sub-header">TYPE OF CONTRACT</h6>
+               <div class="row">
+                  {% for c_type in form.contractType %}
+                  {{ form_row(c_type) }}
+                  {{ form_errors(c_type) }}      
+                  {% endfor %}
+               </div>
+      </div>
+  </div>
+        <div class="panel panel-default">
+                 <div class="panel-body">
+            <h6 class="sub-header">TYPE OF PROCEDURE</h6>
+               <div class="row">
+                 {% for p_type in form.procedureType %}
+                   {{ form_row(p_type) }}
+                   {{ form_errors(p_type) }}    
+                 {% endfor %}
+               </div>
+              </div>
+             </div>
+          </div>
+          </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="pull-right">
+                          {{ form_row(form.nextStep) }}
+                          {{ form_end(form) }}
+                  </div>
+            </div>
+            </div>
+        </div>
+       {% endif %}    
+           
+        
+      </div>
+{% endblock %}

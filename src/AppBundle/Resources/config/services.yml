@@ -1,0 +1,24 @@
+parameters:
+    procurement.tender.class: AppBundle\Util\ProcurementManager
+    procurement.cookie_variation_registry.class: AppBundle\Util\CookieVariationRegistry
+    procurement.tender.limit: 3
+    procurement.tender:viewed.cookie.name: tenderViewed
+    procurement.tender.cookie.expiretime: 63072000
+    
+services:
+    procurement.tender:
+        class: %procurement.tender.class%
+        scope: request
+        calls:
+            - [setEntityManager, [ "@doctrine" ]]
+            - [setRequest, [ "@request" ]]
+            - [setCookieRegistry, [ "@procurement.cookie_variation_registry" ]]
+        arguments:
+            - %procurement.tender.limit%
+            - %procurement.tender:viewed.cookie.name%
+            - %procurement.tender.cookie.expiretime%
+
+    procurement.cookie_variation_registry:
+        class: %procurement.cookie_variation_registry.class%
+        public: false
+        arguments: ["@event_dispatcher"]

@@ -1,0 +1,64 @@
+<?php
+
+namespace AppBundle\Entity;
+
+/**
+ * Description of ContractAwardCreteria
+ *
+ * @author lambert
+ */
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="contractevaluation")
+ * @ORM\HasLifecycleCallBacks()
+ */
+class ContractEvaluation {
+   
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Contract", inversedBy="contractEvaluation")
+     * @ORM\JoinColumn(name="contract", referencedColumnName="id")
+     */
+    protected $contract;
+    
+    /**
+     * @ORM\Column(type="string",length=255)
+     */
+    protected $creterion;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $weighting;
+    
+    /**
+     * @ORM\Column(name="created_at",type="datetime")
+     */
+    protected $createdAt;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="BidEvaluation", mappedBy="awardCreteria")
+     */
+    protected $bidEvaluations;
+    
+    public function __construct() {
+        $this->bidEvaluations = new ArrayCollection();
+    }
+    
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue(){
+        $this->createdAt = new \DateTime();
+    }
+}

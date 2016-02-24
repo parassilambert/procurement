@@ -1,0 +1,24 @@
+{% extends 'AppBundle::contracting.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3 class="page-header">My Profile</h3>
+        </div>
+    </div>
+    <nav>
+        <ul class="nav nav-tabs">
+            <li role="presentation"><a href="{{ path('contracting_profile_edit') }}">Contact Person</a></li> 
+            <li role="presentation" class="active"><a href="#">Account</a></li> 
+        </ul>
+    </nav>
+    <div class="panel-default">
+        <div class="panel-body">
+           
+        </div>
+   </div>
+    <div class="pull-right">
+         <p>
+          <a href="{{ path('contracting_profile_password_edit') }}" class="btn btn-default">Change Password</a>
+         <p> 
+    </div>
+{% endblock %}    

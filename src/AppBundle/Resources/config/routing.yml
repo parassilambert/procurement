@@ -1,0 +1,17 @@
+#src/AppBundle/Resources/config/routing.yml
+app_default:
+    resource: "@AppBundle/Controller/DefaultController.php"
+    type:     annotation
+    prefix:   /
+app_user:
+    resource: "@AppBundle/Controller/EconomicUserController.php"
+    type:     annotation
+    prefix:   /economic
+app_contracting:
+    resource: "@AppBundle/Controller/ContractingUserController.php"
+    type:     annotation
+    prefix:   /contracting
+app_admin:
+    resource: "@AppBundle/Controller/AdminUserController.php"
+    type:     annotation
+    prefix:   /admin    
