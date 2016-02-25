@@ -1,0 +1,68 @@
+{% extends 'AppBundle::admin.html.twig' %}
+{% block body %}
+{{ form_start(form) }}
+{{ form_errors(form) }}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3 class="page-header">My Profile</h3>
+        </div>
+    </div>
+    <nav>
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#">Details</a></li> 
+            <li role="presentation"><a href="{{ path('admin_profile_account_view') }}">Account</a></li> 
+        </ul>
+    </nav>
+    <div class="panel-default">
+        <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <span class="label label-default">{{ form_label(form.firstname,'First Name') }}</span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div>
+                                {{ form_errors(form.firstname) }}       
+                                {{ form_row(form.firstname) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-2">
+                            <span class="label label-default">{{ form_label(form.lastname,'Last Name') }}</span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div>
+                                {{ form_errors(form.lastname) }}       
+                                {{ form_widget(form.lastname) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                    <div class="row">
+                        <div class="col-md-2">
+                            <span class="label label-default">{{ form_label(form.email,'Email') }}</span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div>
+                                {{ form_errors(form.email) }}       
+                                {{ form_widget(form.email) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                            <input type="submit" value="Save" class="btn btn-default pull-right"/>
+                            </div>
+                        </div>
+                    </div>         
+                </div>
+            </div>
+{{ form_end(form) }}
+{% endblock %}    
+

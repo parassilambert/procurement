@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>e-Tendering</title>
+      <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/login.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/dataTables.bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap-table.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/select.bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
+      
+      <script src="{{ asset('js/jquery.min.js') }}"></script>
+      <script src="{{ asset('js/bootstrap.js') }}"></script> 
+      <script src="{{ asset('js/bootstrap.min.js') }}"></script> 
+      <script src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
+      <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+     
+    </head>
+    <body>
+        {# Start Header #}           
+       <nav class="navbar navbar-inverse navbar-fixed-top">
+       <div class="container-fluid">
+       <!-- Brand and toggle get grouped for better mobile display -->
+       <div class="navbar-header">
+       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+          <a class="navbar-brand" href="#">Administrator registration</a>
+       </div>
+       </div><!-- /.container-fluid -->
+      </nav>    
+       {# End Header #}
+            
+            {# Start Container#}
+            <div class="container">
+                  {{ form_start(form) }}
+                  {{ form_errors(form) }}
+   
+
+            <h5>Contact information</h5>
+                  <div class="row">
+            <div class="col-md-1">
+              <span class="label label-default">{{ form_label(form.firstname,'First Name') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.firstname) }}       
+                {{ form_widget(form.firstname) }}
+                </div>
+            </div>
+         </div>  
+         <div class="row">
+            <div class="col-md-1">
+              <span class="label label-default">{{ form_label(form.lastname,'Last Name') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.lastname) }}       
+                {{ form_widget(form.lastname) }}
+                </div>
+            </div>
+         </div>   
+      
+       
+         <div class="row">
+            <div class="col-md-1">
+              <span class="label label-default">{{ form_label(form.email,'Email') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+               {{ form_errors(form.email) }}       
+               {{ form_widget(form.email) }}
+                </div>
+            </div>
+         </div>         
+        
+         <h5>Login information</h5>
+         <div class="row">
+            <div class="col-md-1">
+              <span class="label label-default">{{ form_label(form.username,'Username') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.username) }}       
+                {{ form_widget(form.username) }}
+                </div>
+            </div>
+         </div>  
+         <div class="row">
+            <div class="col-md-1">
+              <span class="label label-default">Password</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.plainPassword) }}       
+                {{ form_widget(form.plainPassword) }}
+                </div>
+            </div>
+         </div>   
+         <div class="row">
+         
+          
+            <div class="col-md-2">
+                <div class="form-group">
+                 {{ form_widget(form.Register) }}
+                 {{ form_end(form) }}
+                 </div>
+            </div>
+            
+         </div>        
+        
+       </div>
+        {# End Container #}
+            
+    </body>
+</html>

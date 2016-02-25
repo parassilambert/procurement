@@ -1,0 +1,154 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h2>Payment for Dossier documents</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div style="margin-top:45px"></div>
+            <p>Current time: {{ "now"|date("d/m/Y h:i:s") }}</p>
+        </div>
+    </div>
+    <section>
+        <div class="row">
+            <div class="col-md-8 col-sm-7">
+                <div class="panel panel-default panel-blog panel-checkout">
+                    <div class="panel-body">
+                        <h3 class="blogsingle-title">Choose your payment Method</h3>
+                        <ul class="blog-meta mb5">
+                                <!--<li>Jan 09, 2015</li>-->
+                        </ul>
+                    <div class="panel-group mt10 mb0" id="accordion" style="border:1px solid #e7e7e7;">
+                        <div id="mpesa" class="panel panel-default">
+                            <div class="panel-heading" onclick="mpesa_b()">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseOne">
+                                        <div class="rdio rdio-default">
+                                            <input type="radio" id="mpesa_b" name="radio">
+                                                <label for="radioDefault" style="margin-bottom:0 !important;">Mpesa</label>
+                                        </div>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <img class="media-object thumbnail pull-left" src="{{ asset('images/mpesa.jpeg') }}" alt="" style="margin-right:10px; width:65px;">
+                                    <div class="clearfix"></div>
+                                    <div id="MpesaStatus">
+                                        <p class="alert alert-success m0"  style="padding:20px; color:000; border-radius:5px; background:fff; border: 1px solid 428bca">To Pay your bill via MPESA. Follow the Steps Below. Once you receive a successful reply from Mpesa. Click the complete button bellow.</p>
+                                    </div>
+                                    <ol class="mt10">                
+                                        <li>Go to M-PESA Menu on your phone</li>
+                                        <li>Select Lipa na M-PESA</li>
+                                        <li>Select Buy Goods and Services</li>
+                                        <li>Enter Till Number. <span style="font-size:12px; font-weight: bold;" >268490</span></li>
+                                        <li>Enter the Amount. KES 1000</li>
+                                        <li>Enter your M-PESA PIN and Send</li>
+                                        <li>You will receive a confirmation SMS from MPESA</li>
+                                    </ol>
+                                    <input type="text" id="maphone" placeholder="Enter Mobile Number You used to pay" class="form-control mb20 mt10" name="ref">
+                                    <input type="text" id="maref" placeholder="Enter Mpesa Reference" class="form-control mb20 mt10" name="ref">
+                                    <button class="btn btn-success" onclick="PayMpesa()">Complete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-5">
+            <div class="panel panel-dark panel-alt billing-information">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Billing Details</h4>
+                        </div>
+                        <div class="panel-body" style="padding:0;">
+                            <div class="authorpanel" style="padding:0; border-top:0;">
+                                <div class="media" style="padding:0 20px;">
+                                    <a href="#" class="pull-left">
+                                        <img style="width:80px;" alt="" src="#" class="media-object thumbnail">
+                                    </a>
+                                    <div class="media-body event-body">
+                                        <h4 class="subtitle" style="margin-bottom:0;">{{ app.user.firstname }} {{ app.user.lastname }}</h4>
+                                        <h4 style="margin-top:2px;"><small>Company: {{ app.user.companyName }}</small></h4>
+                                        <h4 style="margin-top:2px;"><small>Email: {{ app.user.email }}</small></h4>
+                                        <h4 style="margin-top:2px;"><small>Phone: {{ app.user.phoneNumber }}</small></h4> 
+                                        <h4 style="margin-top:2px;"><small>Reference: 463/33430/41575</small></h4>
+                                        <!--                                        <li style="padding-left:20px;"><a href="#">Reference: </a></li>-->
+                                    </div>
+                                </div><!-- media -->
+                            </div>
+                            <h4 style="padding-left:20px; margin-top:20px" class="subtitle mb5 mt10">Order Summary</h4>
+                           
+                        </div>
+                        <div class="panel panel-warning panel-alt widget-today" style="margin-top:0; background:#f2f2f2;">
+                            <div class="panel-body">
+                                <h3 class="today pull-left">Total:</h3>
+                                <h3  id ="nt"  class="pull-right">{{ contract.paymentCurrency }} {{ contract.price }}</h3>
+                            </div><!-- panel-body -->
+                        </div>
+            </div>
+        </div>
+    </div>
+  </section>
+<script>
+    
+    function sleep(milliseconds) {
+        var start = new Date().getTime();
+             for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds) {
+                        break;
+                    }
+                }
+            }
+    function mpesa_b() {
+                $(document).ready(function () {
+                    $("#mpesa_b").attr("checked", "checked");
+                    $("#chf").hide();
+                    $("#chd").hide();
+                    $("#ct").hide();
+                    $("#nt").show();
+                });
+            }
+    function PayMpesa() {
+               
+                Amount = 10;
+                urlOK = document.getElementById('callBackURLOnSuccess').value;
+                $("#MpesaStatus").html("<p class='alert alert-success m0'  style='padding:20px;  border-radius:5px;  border: 1px solid'><img src='images/loaders/loader6.gif'  alt='' />Confirming your Payment .....</p>");
+                gateway = "https://pesaflow.ecitizen.go.ke/PaymentAPI/Gateway.php";
+    
+                var payload = "";
+                var request = $.ajax({
+                    url: gateway,
+                    
+                    type: "POST",
+                    data: {
+                        'payload': payload
+                    },
+                    dataType: "text"
+                });
+                request.done(function (msg) {
+
+                    sleep(5000);
+                    if ($.trim(msg) !== 'OK')
+                    {
+                        amountPayed = msg;
+                        balance = Amount - amountPayed;
+                        displayText = "<p class='alert alert-success m0'  style='padding:20px;  border-radius:5px;  border: 1px solid'>We have received Ksh." + amountPayed + " Please Pay Ksh. " + balance + " to complete the payment. If you have paid the full amount. Wait a few minutes then Click 'Complete' </p>";
+                        $("#MpesaStatus").html(displayText);
+                        sleep(3000);
+                    } else {
+
+                        $("#MpesaStatus").html("<p class='alert alert-success m0'  style='padding:20px;  border-radius:5px;  border: 1px solid'>Successfully paid bill....</p>");
+                        sleep(3000);
+                        window.top.location.href = urlOK;
+                    }
+
+                });
+                request.fail(function (jqXHR, textStatus) {
+                    $("#MpesaStatus").html("<p class='alert alert-success m0'  style='padding:20px;  border-radius:5px;  border: 1px solid'><img src='images/loaders/loader6.gif'  alt='' /> Payment Failed...</p>");
+                });
+            }
+</script>
+{% endblock %}    

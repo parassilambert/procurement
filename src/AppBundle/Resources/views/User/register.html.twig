@@ -1,0 +1,246 @@
+ 
+<!DOCTYPE html>
+<html>
+    <head>
+     <meta charset="utf-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>e-Tendering</title>
+      <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/login.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/dataTables.bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/bootstrap-table.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/select.bootstrap.min.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet" media="screen">
+      <link href="{{ asset('css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
+      
+      <script src="{{ asset('js/jquery.min.js') }}"></script>
+      <script src="{{ asset('js/bootstrap.js') }}"></script> 
+      <script src="{{ asset('js/bootstrap.min.js') }}"></script> 
+      <script src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
+      <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+      
+      <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+       {# Start Header #}           
+       <nav class="navbar navbar-inverse navbar-fixed-top">
+       <div class="container-fluid">
+       <!-- Brand and toggle get grouped for better mobile display -->
+       <div class="navbar-header">
+       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+          <a class="navbar-brand" href="#">Supplier registration</a>
+       </div>
+       </div><!-- /.container-fluid -->
+      </nav>    
+            {# End Header #}
+            {# Start Container#}
+            <div class="container">
+                  {{ form_start(form) }}
+                  {{ form_errors(form) }}
+            <h5>Company information</h5>
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.companyName,'Company Name') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.companyName) }}
+                {{ form_widget(form.companyName) }}
+                </div>
+            </div>
+         </div>  
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.taxCountry,'Tax Country') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.taxCountry) }}
+                {{ form_widget(form.taxCountry) }}
+                </div>
+            </div>
+         </div>   
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.companyRegistrationNumber,'Company Registration Number') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                 {{ form_errors(form.companyRegistrationNumber) }}       
+                 {{ form_widget(form.companyRegistrationNumber) }}
+                </div>
+            </div>
+         </div> 
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.taxId,'Personal Identification Number / Tax ID') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.taxId) }}       
+                {{ form_widget(form.taxId) }}
+                </div>
+            </div>
+         </div>   
+
+            <h5>Contact information</h5>
+                  <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.firstName,'First Name') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.firstName) }}       
+                {{ form_widget(form.firstName) }}
+                </div>
+            </div>
+         </div>  
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.lastName,'Last Name') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.lastName) }}       
+                {{ form_widget(form.lastName) }}
+                </div>
+            </div>
+         </div>   
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.address,'Address') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.address) }}       
+                {{ form_widget(form.address) }}
+                </div>
+            </div>
+         </div> 
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.phoneNumber,'Phone Number') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.phoneNumber) }}       
+                {{ form_widget(form.phoneNumber) }}
+                </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.email,'Email') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+               {{ form_errors(form.email) }}       
+               {{ form_widget(form.email) }}
+                </div>
+            </div>
+         </div>         
+        
+         <h5>Login information</h5>
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">{{ form_label(form.username,'Username') }}</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.username) }}       
+                {{ form_widget(form.username) }}
+                </div>
+            </div>
+         </div>  
+         <div class="row">
+            <div class="col-md-3">
+              <span class="label label-default">Password</span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                {{ form_errors(form.plainPassword) }}       
+                {{ form_widget(form.plainPassword) }}
+                </div>
+            </div>
+         </div>   
+         <div class="row">
+           
+            <div class="col-md-3">
+                <div class="form-group">
+                 {{ form_widget(form.Register) }}
+                 {{ form_end(form) }}
+                 </div>
+            </div>
+            
+         </div>        
+        
+       </div>
+        {# End Container #}
+        
+        <script type="text/javascript">
+          var $collectionHolder;
+           // setup an "add a creteria" link
+          var $addPortfolioLink = $('<a href="#">Add a portfolio</a>');
+          var $newLinkLi = $('<li></li>').append($addPortfolioLink);
+          jQuery(document).ready(function() {
+           // Get the ul that holds the collection of tags
+          $collectionHolder = jQuery('#portfolio-fields-list');
+           // add a delete link to all of the existing creteria form li elements
+          $collectionHolder.find('li').each(function() {
+              addCreteriaFormDeleteLink($(this));
+                });
+             });
+          jQuery(document).ready(function() {
+           // Get the ul that holds the collection of creteria
+          $collectionHolder = jQuery('#portfolio-fields-list');
+          // add the "add a creteria" anchor and li to the creteria ul
+          $collectionHolder.append($newLinkLi);
+          // count the current form inputs we have (e.g. 2), use that as the new
+          // index when inserting a new item (e.g. 2)
+          $collectionHolder.data('index', $collectionHolder.find(':input').length);
+          $addPortfolioLink.on('click', function(e) {
+           // prevent the link from creating a "#" on the URL
+               e.preventDefault();
+           // add a new portfolio form (see next code block)
+          addPortfolioForm($collectionHolder, $newLinkLi);
+               });
+             });
+          function addPortfolioForm($collectionHolder, $newLinkLi) {
+              // Get the data-prototype explained earlier
+           var prototype = $collectionHolder.data('prototype');
+           // get the new index
+           var index = $collectionHolder.data('index');
+           // Replace '__name__' in the prototype's HTML to
+           // instead be a number based on how many items we have
+           var newForm = prototype.replace(/__name__/g, index);
+            // increase the index with one for the next item
+           $collectionHolder.data('index', index + 1);
+            // Display the form in the page in an li, before the "Add a portfolio" link li
+           var $newFormLi = $('<li></li>').append(newForm);
+           $newLinkLi.before($newFormLi);
+             // add a delete link to the new form
+            addPortfolioFormDeleteLink($newFormLi);
+           }
+         function addPortfolioFormDeleteLink($portfolioFormLi) {
+           var $removeFormA = $('<a href="#">Delete this portfolio</a>');
+           $portfolioFormLi.append($removeFormA);
+           $removeFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+           e.preventDefault();
+            // remove the li for the tag form
+           $portfolioFormLi.remove();
+         });
+        }
+</script>
+    </body>
+    
+</html>

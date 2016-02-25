@@ -1,0 +1,57 @@
+{% extends 'AppBundle::contracting.html.twig' %}
+{% block body %}
+  <div class="panel panel-default">
+     <div class="panel-body">
+         <p>
+          <a href="{{ path('contract_notice_step1_create') }}" class="btn btn-info btn-large">Create new contract notice here...</a>
+        <p> 
+     </div>
+  </div>
+  <div class="panel panel-danger">
+     <div class="panel-heading">
+      <h4 class="panel-title">Contract notices</h4>
+      </div>
+       <div class="panel-body">
+           <div id="table-section">
+           </div>
+         </div>
+   </div>  
+   
+  <script type="text/javascript">
+      $('#table-section').html('<table id="contract-notices" class="table table-striped table-bordered" cellspacing="0" width="100%"><thead><tr><th>Reference Number</th><th>Subject</th><th>Created At</th><th>Status</th><th>Action</th></tr></thead><tfoot><tr><th>Reference Number</th><th>Subject</th><th>Created At</th><th>Status</th><th>Action</th></tr></tfoot></table>');     
+      $(document).ready(function() {
+      $('#contract-notices').DataTable( {
+        "ajax": "{{ path('contract_notice_loader') }}",
+        "columns": [
+            {"data": null,mRender: function ( data, type, full, meta ) {
+               var id=data.id;
+               var pld = "{{ path('contract_notice_step1_edit',{'id': "PLACEHODER"}) }}";
+               var path=pld.replace("PLACEHODER", id);
+               
+              return '<a href="'+path+'">'+data.referenceNumber+'</a>';
+              }},
+            { "data": "title" },
+          
+            { "data": "createdAt.timestamp",mRender: function ( data, type, full, meta ) {
+               var theDate = new Date((data*1000));
+               return dateString = theDate;
+              }},
+            { "data": "status" },
+            { "data": null,mRender: function ( data, type, full, meta ) {
+               var id=data.id;
+               var pld = "{{ path('contract_removal',{'id': "PLACEHODER"}) }}";
+               var path=pld.replace("PLACEHODER", id);
+              return '<a href="'+path+'">'+"Delete"+'</a>';
+              }}
+           ],
+       "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if (aData['status'] == "Draft") {
+              $('td', nRow).css({"background-color":"Orange"});
+            }else{
+              $('td', nRow).css({"background-color":"LawnGreen"});
+            }
+          }
+        });
+       });
+  </script> 
+{% endblock %}    
