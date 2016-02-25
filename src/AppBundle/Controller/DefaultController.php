@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\Response;
+
 use AppBundle\Entity\Payment;
 use AppBundle\Entity\Audit;
 class DefaultController extends Controller{
@@ -40,6 +40,7 @@ class DefaultController extends Controller{
         $em->persist($payment);
         $em->flush();
        }else{
+           
         //Audit
         $audit = new Audit();
         $audit->setUsername($data['sender_phone']);
