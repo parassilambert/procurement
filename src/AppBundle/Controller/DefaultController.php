@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Payment;
+use AppBundle\Entity\Audit;
 class DefaultController extends Controller{
     
     /**
@@ -20,7 +21,6 @@ class DefaultController extends Controller{
         $data = json_decode($request->getContent(), true);
         $hashed_value= base64_encode(hash_hmac("sha1", $request->getContent(), "467b0802b92753a97df396b73f65e289d612d2c9", true));
         $hashed_expected = $data['signature'];
-        
         if (self::hash_compareAction($hashed_value, $hashed_expected)) {
         $payment->setBusinessNumber($data['business_number']);
         $payment->setTransactionReference($data['transaction_reference']);
@@ -40,9 +40,15 @@ class DefaultController extends Controller{
         $em->persist($payment);
         $em->flush();
        }else{
-           echo "hashes do not match!";
-           echo  "Expected hashed=".$hashed_expected;
-           echo  "Hashed value=".$hashed_value;
+        //Audit
+        $audit = new Audit();
+        $audit->setUsername($data['sender_phone']);
+        $audit->setName($data['first_name']." ".$data['last_name']);
+        $audit->setFunctionType("Payment");
+        $audit->setEventType("Hashes do not match!");
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($audit);
+        $em->flush();
       }
     }
  }
