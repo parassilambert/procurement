@@ -5,15 +5,13 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Payment;
 use AppBundle\Entity\Audit;
 class DefaultController extends Controller{
     
     /**
      * @Route("/paymentgateway", name="payment_gateway")
-     * @Template()
      */    
  public function recievePaymentAction(Request $request){
      if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
@@ -39,6 +37,7 @@ class DefaultController extends Controller{
         $em = $this->getDoctrine()->getManager();
         $em->persist($payment);
         $em->flush();
+        return $response = new Response(null); 
        }else{
            
         //Audit
@@ -50,6 +49,7 @@ class DefaultController extends Controller{
         $em = $this->getDoctrine()->getManager();
         $em->persist($audit);
         $em->flush();
+       return $response = new Response(null); 
       }
     }
  }

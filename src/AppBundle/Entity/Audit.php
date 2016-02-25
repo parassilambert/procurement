@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="audit")
- * @ORM\HasLifecycleCallBacks()
+ * @ORM\HasLifecycleCallbacks()
  */
 class Audit {
     
