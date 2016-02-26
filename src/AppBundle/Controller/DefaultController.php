@@ -17,7 +17,15 @@ class DefaultController extends Controller{
      if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
         $payment = new Payment();
         $data = json_decode($request->getContent(), true);
-        $hashed_value= base64_encode(hash_hmac("sha1", $request->getContent(), "467b0802b92753a97df396b73f65e289d612d2c9", true));
+        
+        $base_string = $data['account_number']."=account_number&".
+                 $data['amount']."=amount&".$data['business_number']."=business_number&".
+                 $data['currency']."=currency&".$data['first_name']."=first_name&".
+                 $data['internal_transaction_id']."=internal_transaction_id&".$data['last_name']."=last_name&".$data['middle_name']."=middle_name&".
+                 $data['sender_phone']."=sender_phone&".$data['service_name']."=service_name&".$data['transaction_reference']."=transaction_reference&".
+                 $data['transaction_timestamp']."=transaction_timestamp&".$data['transaction_type']."=transaction_type";
+   
+        $hashed_value =  (hash_hmac("sha1", $base_string, "810c06caa57be23b9006e5e4499d1001f423e149"));
         $hashed_expected = $data['signature'];
         if (self::hash_compareAction($hashed_value, $hashed_expected)) {
         $payment->setBusinessNumber($data['business_number']);
@@ -37,7 +45,7 @@ class DefaultController extends Controller{
         $em = $this->getDoctrine()->getManager();
         $em->persist($payment);
         $em->flush();
-        return $response = new Response(null); 
+        return $response = new Response("Hashes match!"); 
        }else{
            
         //Audit
@@ -49,7 +57,7 @@ class DefaultController extends Controller{
         $em = $this->getDoctrine()->getManager();
         $em->persist($audit);
         $em->flush();
-       return $response = new Response(null); 
+       return $response = new Response("Hashes do not match!"." " . "Base_String:".$base_string." " ."Generated signature:".$hashed_value); 
       }
     }
  }
