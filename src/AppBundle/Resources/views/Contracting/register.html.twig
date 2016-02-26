@@ -5,23 +5,30 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>e-Tendering</title>
-      <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/login.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/dataTables.bootstrap.min.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/bootstrap-table.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/select.bootstrap.min.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet" media="screen">
-      <link href="{{ asset('css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
-      
-      <script src="{{ asset('js/jquery.min.js') }}"></script>
-      <script src="{{ asset('js/bootstrap.js') }}"></script> 
-      <script src="{{ asset('js/bootstrap.min.js') }}"></script> 
-      <script src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
-      <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
-     
+        {% stylesheets
+           'css/bootstrap.min.css'
+           'css/main.css'
+           'css/bootstrap-theme.min.css'
+           'css/login.css'
+           'css/dashboard.css'
+           'css/dataTables.bootstrap.min.css'
+           'css/bootstrap-table.css'
+           'css/select.bootstrap.min.css'
+           'css/datepicker.css'
+           'css/jquery.datetimepicker.css'
+        filter='cssrewrite' output='css/compiled/app.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        {% javascripts
+           'js/jquery.min.js'
+           'js/bootstrap.min.js'
+           'js/bootstrap.js'
+           'js/bootstrap-datepicker.js'
+           'js/jquery.datetimepicker.full.min.js'
+        output='js/compiled/app.js' %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+ 
     </head>
     <body>
         {# Start Header #}           
